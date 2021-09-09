@@ -48,7 +48,11 @@ void Cart::load(const std::string &filename)
 		case 2:   type = new UxROM(info); break;
 		case 94:  type = new UxROMA(info); break;
 		case 180: type = new UxROMB(info); break;
-		case 1:   type = new MMC1(info); break;
+		case 1:
+			if (info.ram_size == 0x8000) type = new MMC1B(info);
+			else if (info.ram_size == 0x4000) type = new MMC1C(info);
+			else type = new MMC1(info);
+			break;
 		case 155: type = new MMC1A(info); break;
 		case 9:   type = new MMC2(info); break;
 		case 4:

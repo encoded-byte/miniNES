@@ -15,12 +15,12 @@ void MMC1::reset()
 	shift = 0x10;
 	mirroring = 3;
 	prg_mode = 3;
-	chr_mode = 1;
 	prg_bank = 0;
+	chr_mode = 1;
 	chr_bank[0] = 0;
 	chr_bank[1] = 0;
+	chr_index = 0;
 	ram_enable = 0;
-	prg_offset = 1;
 }
 
 
@@ -34,16 +34,7 @@ void MMC1::reset()
 // RAM read: 0x6000 - 0x7fff
 uint8_t MMC1::read_ram(uint16_t addr)
 {
-	if (info.ram_size && ram_enable)
-	{
-		uint32_t bank_offset = (chr_bank[0] & 0xfc) << 11;
-		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
-		ram_addr &= info.ram_size - 1;
-
-		return ram[ram_addr];
-	}
-
-	return 0xff;
+	return ram_enable ? ram[addr & 0x1fff] : 0xff;
 }
 
 // RAM read: 0x6000 - 0x7fff
@@ -52,23 +43,77 @@ uint8_t MMC1A::read_ram(uint16_t addr)
 	return ram[addr & 0x1fff];
 }
 
+// RAM read: 0x6000 - 0x7fff
+uint8_t MMC1B::read_ram(uint16_t addr)
+{
+	if (ram_enable)
+	{
+		uint8_t index = chr_mode ? chr_index : 0;
+		uint32_t bank_offset = (chr_bank[index] & 0xfc) << 11;
+		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
+		ram_addr &= 0x7fff;
+
+		return ram[ram_addr];
+	}
+
+	return 0xff;
+}
+
+// RAM read: 0x6000 - 0x7fff
+uint8_t MMC1C::read_ram(uint16_t addr)
+{
+	if (ram_enable)
+	{
+		uint8_t index = chr_mode ? chr_index : 0;
+		uint32_t bank_offset = (chr_bank[index] & 0x10) << 9;
+		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
+		ram_addr &= 0x3fff;
+
+		return ram[ram_addr];
+	}
+
+	return 0xff;
+}
+
 // RAM write: 0x6000 - 0x7fff
 void MMC1::write_ram(uint16_t addr, uint8_t data)
 {
-	if (info.ram_size && ram_enable)
-	{
-		uint32_t bank_offset = (chr_bank[0] & 0xfc) << 11;
-		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
-		ram_addr &= info.ram_size - 1;
-
-		ram[ram_addr] = data;
-	}
+	if (ram_enable)
+		ram[addr & 0x1fff] = data;
 }
 
 // RAM write: 0x6000 - 0x7fff
 void MMC1A::write_ram(uint16_t addr, uint8_t data)
 {
 	ram[addr & 0x1fff] = data;
+}
+
+// RAM write: 0x6000 - 0x7fff
+void MMC1B::write_ram(uint16_t addr, uint8_t data)
+{
+	if (ram_enable)
+	{
+		uint8_t index = chr_mode ? chr_index : 0;
+		uint32_t bank_offset = (chr_bank[index] & 0xfc) << 11;
+		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
+		ram_addr &= 0x7fff;
+
+		ram[ram_addr] = data;
+	}
+}
+
+// RAM write: 0x6000 - 0x7fff
+void MMC1C::write_ram(uint16_t addr, uint8_t data)
+{
+	if (ram_enable)
+	{
+		uint8_t index = chr_mode ? chr_index : 0;
+		uint32_t bank_offset = (chr_bank[index] & 0x10) << 9;
+		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
+		ram_addr &= 0x3fff;
+
+		ram[ram_addr] = data;
+	}
 }
 
 
@@ -105,7 +150,8 @@ uint8_t MMC1::read_prg(uint16_t addr)
 		}
 	}
 
-	bank_offset |= prg_offset ? 0x40000 : 0;
+	uint8_t index = chr_mode ? chr_index : 0;
+	bank_offset |= chr_bank[index] & 0x10 ? 0x40000 : 0;
 	uint32_t bank_mask = (prg_mode & 0x02) ? 0x3fff : 0x7fff;
 	uint32_t prg_addr = (addr & bank_mask) | bank_offset;
 	prg_addr &= info.prg_size - 1;
@@ -137,7 +183,6 @@ void MMC1::write_prg(uint16_t addr, uint8_t data)
 			break;
 		case 0xa000:
 			chr_bank[0] = shift;
-			prg_offset = shift & 0x10;
 			break;
 		case 0xc000:
 			chr_bank[1] = shift;
@@ -164,11 +209,12 @@ void MMC1::write_prg(uint16_t addr, uint8_t data)
 uint8_t MMC1::read_chr(uint16_t addr)
 {
 	uint32_t bank_offset = 0;
+	chr_index = addr >> 12;
 
 	if (chr_mode == 0)
 		bank_offset = (chr_bank[0] & 0xfe) << 12;
 	else
-		bank_offset = chr_bank[addr >> 12] << 12;
+		bank_offset = chr_bank[chr_index] << 12;
 
 	uint16_t bank_mask = chr_mode == 0 ? 0x1fff : 0x0fff;
 	uint32_t chr_addr = (addr & bank_mask) | bank_offset;
@@ -182,11 +228,12 @@ uint8_t MMC1::read_chr(uint16_t addr)
 void MMC1::write_chr(uint16_t addr, uint8_t data)
 {
 	uint32_t bank_offset = 0;
+	chr_index = addr >> 12;
 
 	if (chr_mode == 0)
 		bank_offset = (chr_bank[0] & 0xfe) << 12;
 	else
-		bank_offset = chr_bank[addr >> 12] << 12;
+		bank_offset = chr_bank[chr_index] << 12;
 
 	uint16_t bank_mask = chr_mode == 0 ? 0x1fff : 0x0fff;
 	uint32_t chr_addr = (addr & bank_mask) | bank_offset;
