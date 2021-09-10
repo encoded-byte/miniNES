@@ -18,6 +18,7 @@
 #include "boards/Sunsoft5.h"
 #include "boards/UxROM.h"
 #include "boards/VRC1.h"
+#include "boards/VRC2.h"
 #include "boards/VRC3.h"
 #include "devices/Cart.h"
 
@@ -77,6 +78,20 @@ void Cart::load(const std::string &filename)
 
 		// Konami
 		case 75:  type = new VRC1(info); break;
+		case 21:
+			if (info.submapper == 2) type = new VRC4E(info);
+			else type = new VRC4B(info);
+			break;
+		case 23:
+			if (info.submapper == 3) type = new VRC2(info);
+			else type = new VRC4C(info);
+			break;
+		case 25:
+			if (info.submapper == 3) type = new VRC2A(info);
+			else if (info.submapper == 2) type = new VRC4D(info);
+			else type = new VRC4A(info);
+			break;
+		case 22:  type = new VRC2B(info); break;
 		case 73:  type = new VRC3(info); break;
 
 		// Sunsoft
