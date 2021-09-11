@@ -20,6 +20,7 @@
 #include "boards/VRC1.h"
 #include "boards/VRC2.h"
 #include "boards/VRC3.h"
+#include "boards/VRC7.h"
 #include "devices/Cart.h"
 
 
@@ -93,6 +94,10 @@ void Cart::load(const std::string &filename)
 			break;
 		case 22:  type = new VRC2B(info); break;
 		case 73:  type = new VRC3(info); break;
+		case 85:
+			if (info.submapper == 2) type = new VRC7A(info);
+			else type = new VRC7(info);
+			break;
 
 		// Sunsoft
 		case 184: type = new Sunsoft1(info); break;
