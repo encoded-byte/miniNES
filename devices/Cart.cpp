@@ -20,6 +20,7 @@
 #include "boards/VRC1.h"
 #include "boards/VRC3.h"
 #include "boards/VRC4.h"
+#include "boards/VRC6.h"
 #include "boards/VRC7.h"
 #include "devices/Cart.h"
 
@@ -74,6 +75,8 @@ void Cart::load(const std::string &filename)
 		case 22:  type = new VRC4(info); break;
 		case 23:  type = new VRC4(info); break;
 		case 25:  type = new VRC4(info); break;
+		case 24:  type = new VRC6(info); break;
+		case 26:  type = new VRC6(info); break;
 		case 85:  type = new VRC7(info); break;
 
 		// Sunsoft
