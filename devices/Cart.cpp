@@ -9,7 +9,7 @@
 #include "boards/MMC3.h"
 #include "boards/Namco118.h"
 #include "boards/Namco163.h"
-#include "boards/Namco175.h"
+#include "boards/Namco340.h"
 #include "boards/NROM.h"
 #include "boards/Sunsoft1.h"
 #include "boards/Sunsoft2.h"
@@ -18,8 +18,8 @@
 #include "boards/Sunsoft5.h"
 #include "boards/UxROM.h"
 #include "boards/VRC1.h"
-#include "boards/VRC2.h"
 #include "boards/VRC3.h"
+#include "boards/VRC4.h"
 #include "boards/VRC7.h"
 #include "devices/Cart.h"
 
@@ -50,54 +50,31 @@ void Cart::load(const std::string &filename)
 		case 2:   type = new UxROM(info); break;
 		case 94:  type = new UxROMA(info); break;
 		case 180: type = new UxROMB(info); break;
-		case 1:
-			if (info.ram_size == 0x8000) type = new MMC1B(info);
-			else if (info.ram_size == 0x4000) type = new MMC1C(info);
-			else type = new MMC1(info);
-			break;
+		case 1:   type = new MMC1(info); break;
 		case 155: type = new MMC1A(info); break;
 		case 9:   type = new MMC2(info); break;
-		case 4:
-			if (info.submapper == 1) type = new MMC6(info);
-			else type = new MMC3(info);
-			break;
+		case 4:   type = new MMC3(info); break;
 		case 119: type = new MMC3A(info); break;
 		case 118: type = new MMC3B(info); break;
 		case 10:  type = new MMC4(info); break;
 
 		// Namco
 		case 206: type = new Namco118(info); break;
-		case 88:  type = new Namco118A(info); break;
-		case 76:  type = new Namco118B(info); break;
-		case 95:  type = new Namco118C(info); break;
-		case 154: type = new Namco118D(info); break;
+		case 88:  type = new Namco118(info); break;
+		case 76:  type = new Namco118A(info); break;
+		case 95:  type = new Namco118B(info); break;
+		case 154: type = new Namco118C(info); break;
 		case 19:  type = new Namco163(info); break;
-		case 210:
-			if (info.submapper == 2) type = new Namco340(info);
-			else type = new Namco175(info);
-			break;
+		case 210: type = new Namco340(info); break;
 
 		// Konami
 		case 75:  type = new VRC1(info); break;
-		case 21:
-			if (info.submapper == 2) type = new VRC4E(info);
-			else type = new VRC4B(info);
-			break;
-		case 23:
-			if (info.submapper == 3) type = new VRC2(info);
-			else type = new VRC4C(info);
-			break;
-		case 25:
-			if (info.submapper == 3) type = new VRC2A(info);
-			else if (info.submapper == 2) type = new VRC4D(info);
-			else type = new VRC4A(info);
-			break;
-		case 22:  type = new VRC2B(info); break;
 		case 73:  type = new VRC3(info); break;
-		case 85:
-			if (info.submapper == 2) type = new VRC7A(info);
-			else type = new VRC7(info);
-			break;
+		case 21:  type = new VRC4(info); break;
+		case 22:  type = new VRC4(info); break;
+		case 23:  type = new VRC4(info); break;
+		case 25:  type = new VRC4(info); break;
+		case 85:  type = new VRC7(info); break;
 
 		// Sunsoft
 		case 184: type = new Sunsoft1(info); break;
@@ -108,7 +85,7 @@ void Cart::load(const std::string &filename)
 		case 69:  type = new Sunsoft5(info); break;
 
 		// Unsupported
-		default: throw std::runtime_error("Cart: Invalid mapper " + std::to_string(info.mapper));
+		default: throw std::runtime_error("Cart: Unsupported mapper " + std::to_string(info.mapper));
 		}
 	}
 	else if (extension == ".fds")
@@ -116,7 +93,7 @@ void Cart::load(const std::string &filename)
 		// Nintendo FDS
 		type = new FDS();
 	}
-	else throw std::runtime_error("Cart: Invalid file " + filename);
+	else throw std::runtime_error("Cart: Unsupported file " + filename);
 
 	board.reset(type);
 	board->load(ifs);

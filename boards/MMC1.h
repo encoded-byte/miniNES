@@ -49,27 +49,3 @@ protected:
 public:
 	MMC1A(BoardInfo info) : MMC1(info) {}
 };
-
-
-class MMC1B : public MMC1
-{
-protected:
-	// RAM Access
-	uint8_t read_ram(uint16_t addr) override;
-	void write_ram(uint16_t addr, uint8_t data) override;
-
-public:
-	MMC1B(BoardInfo info) : MMC1(info) {}
-};
-
-
-class MMC1C : public MMC1
-{
-protected:
-	// RAM Access
-	uint8_t read_ram(uint16_t addr) override;
-	void write_ram(uint16_t addr, uint8_t data) override;
-
-public:
-	MMC1C(BoardInfo info) : MMC1(info) {}
-};

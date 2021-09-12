@@ -41,13 +41,6 @@ void MMC3::reset()
 	ram_w_enable = 0;
 }
 
-// Signal: Reset
-void MMC6::reset()
-{
-	MMC3::reset();
-	ram_enable = 0;
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -59,27 +52,17 @@ void MMC6::reset()
 // RAM read: 0x6000 - 0x7fff
 uint8_t MMC3::read_ram(uint16_t addr)
 {
-	return ram_r_enable ? ram[addr & 0x1fff] : 0xff;
-}
+	if (ram_r_enable || info.submapper == 1)
+		return ram[addr & 0x1fff];
 
-// RAM read: 0x6000 - 0x7fff
-uint8_t MMC6::read_ram(uint16_t addr)
-{
-	return addr >= 0x7000 && ram_enable ? ram[addr & 0x03ff] : 0xff;
+	return 0xff;
 }
 
 // RAM write: 0x6000 - 0x7fff
 void MMC3::write_ram(uint16_t addr, uint8_t data)
 {
-	if (ram_w_enable)
+	if (ram_w_enable || info.submapper == 1)
 		ram[addr & 0x1fff] = data;
-}
-
-// RAM write: 0x6000 - 0x7fff
-void MMC6::write_ram(uint16_t addr, uint8_t data)
-{
-	if (addr >= 0x7000 && ram_enable)
-		ram[addr & 0x03ff] = data;
 }
 
 
@@ -144,15 +127,6 @@ void MMC3::write_prg(uint16_t addr, uint8_t data)
 		irq_enable = 1;
 		break;
 	}
-}
-
-// PRG write: 0x8000 - 0xffff
-void MMC6::write_prg(uint16_t addr, uint8_t data)
-{
-	MMC3::write_prg(addr, data);
-
-	if ((addr & 0xe001) == 0x8000)
-		ram_enable = data & 0x20;
 }
 
 

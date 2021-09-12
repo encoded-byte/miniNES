@@ -34,7 +34,21 @@ void MMC1::reset()
 // RAM read: 0x6000 - 0x7fff
 uint8_t MMC1::read_ram(uint16_t addr)
 {
-	return ram_enable ? ram[addr & 0x1fff] : 0xff;
+	if (ram_enable && info.ram_size)
+	{
+		uint32_t bank_offset = 0;
+		uint8_t index = chr_mode ? chr_index : 0;
+		if (info.ram_size == 0x8000)
+			bank_offset = (chr_bank[index] & 0xfc) << 11;
+		if (info.ram_size == 0x4000)
+			bank_offset = (chr_bank[index] & 0x10) << 9;
+		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
+		ram_addr &= info.ram_size - 1;
+
+		return ram[ram_addr];
+	}
+
+	return 0xff;
 }
 
 // RAM read: 0x6000 - 0x7fff
@@ -43,77 +57,28 @@ uint8_t MMC1A::read_ram(uint16_t addr)
 	return ram[addr & 0x1fff];
 }
 
-// RAM read: 0x6000 - 0x7fff
-uint8_t MMC1B::read_ram(uint16_t addr)
-{
-	if (ram_enable)
-	{
-		uint8_t index = chr_mode ? chr_index : 0;
-		uint32_t bank_offset = (chr_bank[index] & 0xfc) << 11;
-		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
-		ram_addr &= 0x7fff;
-
-		return ram[ram_addr];
-	}
-
-	return 0xff;
-}
-
-// RAM read: 0x6000 - 0x7fff
-uint8_t MMC1C::read_ram(uint16_t addr)
-{
-	if (ram_enable)
-	{
-		uint8_t index = chr_mode ? chr_index : 0;
-		uint32_t bank_offset = (chr_bank[index] & 0x10) << 9;
-		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
-		ram_addr &= 0x3fff;
-
-		return ram[ram_addr];
-	}
-
-	return 0xff;
-}
-
 // RAM write: 0x6000 - 0x7fff
 void MMC1::write_ram(uint16_t addr, uint8_t data)
 {
-	if (ram_enable)
-		ram[addr & 0x1fff] = data;
+	if (ram_enable && info.ram_size)
+	{
+		uint32_t bank_offset = 0;
+		uint8_t index = chr_mode ? chr_index : 0;
+		if (info.ram_size == 0x8000)
+			bank_offset = (chr_bank[index] & 0xfc) << 11;
+		if (info.ram_size == 0x4000)
+			bank_offset = (chr_bank[index] & 0x10) << 9;
+		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
+		ram_addr &= info.ram_size - 1;
+
+		ram[ram_addr] = data;
+	}
 }
 
 // RAM write: 0x6000 - 0x7fff
 void MMC1A::write_ram(uint16_t addr, uint8_t data)
 {
 	ram[addr & 0x1fff] = data;
-}
-
-// RAM write: 0x6000 - 0x7fff
-void MMC1B::write_ram(uint16_t addr, uint8_t data)
-{
-	if (ram_enable)
-	{
-		uint8_t index = chr_mode ? chr_index : 0;
-		uint32_t bank_offset = (chr_bank[index] & 0xfc) << 11;
-		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
-		ram_addr &= 0x7fff;
-
-		ram[ram_addr] = data;
-	}
-}
-
-// RAM write: 0x6000 - 0x7fff
-void MMC1C::write_ram(uint16_t addr, uint8_t data)
-{
-	if (ram_enable)
-	{
-		uint8_t index = chr_mode ? chr_index : 0;
-		uint32_t bank_offset = (chr_bank[index] & 0x10) << 9;
-		uint32_t ram_addr = (addr & 0x1fff) | bank_offset;
-		ram_addr &= 0x3fff;
-
-		ram[ram_addr] = data;
-	}
 }
 
 

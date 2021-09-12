@@ -49,26 +49,6 @@ public:
 };
 
 
-class MMC6 : public MMC3
-{
-protected:
-	bool ram_enable;
-
-	// RAM Access
-	uint8_t read_ram(uint16_t addr) override;
-	void write_ram(uint16_t addr, uint8_t data) override;
-
-	// PRG Access
-	void write_prg(uint16_t addr, uint8_t data) override;
-
-public:
-	MMC6(BoardInfo info) : MMC3(info) {}
-
-	// Signals
-	void reset() override;
-};
-
-
 class MMC3A : public MMC3
 {
 protected:

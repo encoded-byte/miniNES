@@ -99,6 +99,9 @@ uint8_t VRC7::read_prg(uint16_t addr)
 // PRG write: 0x8000 - 0xffff
 void VRC7::write_prg(uint16_t addr, uint8_t data)
 {
+	if (info.submapper == 2)
+		addr = (addr & 0xf000) | ((addr >> 1) & 0x08);
+
 	uint8_t prg_index = ((addr >> 11) & 0x02) | ((addr >> 3) & 0x01);
 	uint8_t chr_index = (((addr + 0x2000) >> 11) & 0x06) | ((addr >> 3) & 0x01);
 
@@ -139,13 +142,6 @@ void VRC7::write_prg(uint16_t addr, uint8_t data)
 		irq_enable = irq_repeat;
 		break;
 	}
-}
-
-// PRG write: 0x8000 - 0xffff
-void VRC7A::write_prg(uint16_t addr, uint8_t data)
-{
-	addr = (addr & 0xf000) | ((addr >> 1) & 0x08);
-	VRC7::write_prg(addr, data);
 }
 
 

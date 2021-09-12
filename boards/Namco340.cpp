@@ -1,4 +1,4 @@
-#include "boards/Namco175.h"
+#include "boards/Namco340.h"
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -9,20 +9,14 @@
 
 
 // Signal: Reset
-void Namco175::reset()
+void Namco340::reset()
 {
 	for (uint8_t i = 0; i != 8; ++i)
 		chr_bank[i] = 0;
 	for (uint8_t i = 0; i != 3; ++i)
 		prg_bank[i] = 0;
-	ram_enable = 0;
-}
-
-// Signal: Reset
-void Namco340::reset()
-{
-	Namco175::reset();
 	mirroring = 0;
+	ram_enable = 0;
 }
 
 
@@ -34,13 +28,13 @@ void Namco340::reset()
 
 
 // RAM read: 0x6000 - 0x7fff
-uint8_t Namco175::read_ram(uint16_t addr)
+uint8_t Namco340::read_ram(uint16_t addr)
 {
 	return ram_enable ? ram[addr & 0x07ff] : 0xff;
 }
 
 // RAM write: 0x6000 - 0x7fff
-void Namco175::write_ram(uint16_t addr, uint8_t data)
+void Namco340::write_ram(uint16_t addr, uint8_t data)
 {
 	if (ram_enable)
 		ram[addr & 0x07ff] = data;
@@ -55,7 +49,7 @@ void Namco175::write_ram(uint16_t addr, uint8_t data)
 
 
 // PRG read: 0x8000 - 0xffff
-uint8_t Namco175::read_prg(uint16_t addr)
+uint8_t Namco340::read_prg(uint16_t addr)
 {
 	uint32_t bank_offset = 0;
 
@@ -74,7 +68,7 @@ uint8_t Namco175::read_prg(uint16_t addr)
 }
 
 // PRG write: 0x8000 - 0xffff
-void Namco175::write_prg(uint16_t addr, uint8_t data)
+void Namco340::write_prg(uint16_t addr, uint8_t data)
 {
 	switch (addr & 0xf800)
 	{
@@ -85,19 +79,14 @@ void Namco175::write_prg(uint16_t addr, uint8_t data)
 	case 0xc000:
 		ram_enable = data & 0x01;
 		break;
-	case 0xe000: case 0xe800: case 0xf000:
+	case 0xe000:
+		prg_bank[0] = data & 0x3f;
+		mirroring = data >> 6;
+		break;
+	case 0xe800: case 0xf000:
 		prg_bank[(addr >> 11) & 0x03] = data & 0x3f;
 		break;
 	}
-}
-
-// PRG write: 0x8000 - 0xffff
-void Namco340::write_prg(uint16_t addr, uint8_t data)
-{
-	Namco175::write_prg(addr, data);
-
-	if ((addr & 0xf800) == 0xe000)
-		mirroring = data >> 6;
 }
 
 
@@ -109,7 +98,7 @@ void Namco340::write_prg(uint16_t addr, uint8_t data)
 
 
 // CHR read: 0x0000 - 0x1fff
-uint8_t Namco175::read_chr(uint16_t addr)
+uint8_t Namco340::read_chr(uint16_t addr)
 {
 	uint32_t bank_offset = chr_bank[addr >> 10] << 10;
 	uint32_t chr_addr = (addr & 0x03ff) | bank_offset;
@@ -129,6 +118,9 @@ uint8_t Namco175::read_chr(uint16_t addr)
 // NT read: 0x2000 - 0x3eff
 uint8_t Namco340::read_nt(uint16_t addr)
 {
+	if (info.submapper != 2)
+		return Board::read_nt(addr);
+
 	switch (mirroring)
 	{
 	case 0: addr = addr_nt_single(addr, 0); break;
@@ -143,6 +135,9 @@ uint8_t Namco340::read_nt(uint16_t addr)
 // NT write: 0x2000 - 0x3eff
 void Namco340::write_nt(uint16_t addr, uint8_t data)
 {
+	if (info.submapper != 2)
+		return Board::write_nt(addr, data);
+
 	switch (mirroring)
 	{
 	case 0: addr = addr_nt_single(addr, 0); break;
