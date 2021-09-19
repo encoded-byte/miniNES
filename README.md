@@ -1,6 +1,6 @@
 # miniNES
 
-A minimal Famicom/NES emulator written in C++ just for fun.
+A minimal Famicom/NES emulator built in C++ just for fun.
 
 Compilation
 -----------
