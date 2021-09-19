@@ -179,7 +179,7 @@ void VRC4::write_prg(uint16_t addr, uint8_t data)
 // CHR read: 0x0000 - 0x1fff
 uint8_t VRC4::read_chr(uint16_t addr)
 {
-	uint8_t bank_data = chr_bank[addr >> 10];
+	uint16_t bank_data = chr_bank[addr >> 10];
 	if (info.mapper == 22) bank_data >>= 1;
 	uint32_t chr_addr = (addr & 0x03ff) | bank_data << 10;
 	chr_addr &= info.chr_size - 1;
