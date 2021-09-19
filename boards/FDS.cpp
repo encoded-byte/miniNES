@@ -240,9 +240,9 @@ uint8_t FDS::read_reg(uint16_t addr)
 	case 0x4030:
 		if (enabled)
 		{
-			data = 0x80;
-			data |= timer.irq;
+			data = timer.irq;
 			data |= drive.transfer << 1;
+			data |= 0x80;
 			drive.transfer = 0;
 		}
 		drive.irq = 0;

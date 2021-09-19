@@ -5,85 +5,85 @@
 const CPU::Opcode CPU::op_table[256]
 {
 	// 0x00 - 0x0f
-	{ CPU::BRK, CPU::IMP, 7, 0, 0 }, { CPU::ORA, CPU::IDX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPG, 3, 0, 0 }, { CPU::ORA, CPU::ZPG, 3, 0, 0 }, { CPU::ASL, CPU::ZPG, 5, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::PHP, CPU::IMP, 3, 0, 0 }, { CPU::ORA, CPU::IMM, 2, 0, 0 }, { CPU::ASL, CPU::ACC, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ABS, 4, 0, 0 }, { CPU::ORA, CPU::ABS, 4, 0, 0 }, { CPU::ASL, CPU::ABS, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BRK, &CPU::IMP, 7, 0, 0 }, { &CPU::ORA, &CPU::IDX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPG, 3, 0, 0 }, { &CPU::ORA, &CPU::ZPG, 3, 0, 0 }, { &CPU::ASL, &CPU::ZPG, 5, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::PHP, &CPU::IMP, 3, 0, 0 }, { &CPU::ORA, &CPU::IMM, 2, 0, 0 }, { &CPU::ASL, &CPU::ACC, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ABS, 4, 0, 0 }, { &CPU::ORA, &CPU::ABS, 4, 0, 0 }, { &CPU::ASL, &CPU::ABS, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x10 - 0x1f
-	{ CPU::BPL, CPU::REL, 2, 1, 1 }, { CPU::ORA, CPU::IDY, 5, 1, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPX, 4, 0, 0 }, { CPU::ORA, CPU::ZPX, 4, 0, 0 }, { CPU::ASL, CPU::ZPX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::CLC, CPU::IMP, 2, 0, 0 }, { CPU::ORA, CPU::ABY, 4, 1, 0 }, { CPU::NOP, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ABX, 4, 1, 0 }, { CPU::ORA, CPU::ABX, 4, 1, 0 }, { CPU::ASL, CPU::ABX, 7, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BPL, &CPU::REL, 2, 1, 1 }, { &CPU::ORA, &CPU::IDY, 5, 1, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPX, 4, 0, 0 }, { &CPU::ORA, &CPU::ZPX, 4, 0, 0 }, { &CPU::ASL, &CPU::ZPX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::CLC, &CPU::IMP, 2, 0, 0 }, { &CPU::ORA, &CPU::ABY, 4, 1, 0 }, { &CPU::NOP, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ABX, 4, 1, 0 }, { &CPU::ORA, &CPU::ABX, 4, 1, 0 }, { &CPU::ASL, &CPU::ABX, 7, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x20 - 0x2f
-	{ CPU::JSR, CPU::ABS, 6, 0, 0 }, { CPU::AND, CPU::IDX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::BIT, CPU::ZPG, 3, 0, 0 }, { CPU::AND, CPU::ZPG, 3, 0, 0 }, { CPU::ROL, CPU::ZPG, 5, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::PLP, CPU::IMP, 4, 0, 0 }, { CPU::AND, CPU::IMM, 2, 0, 0 }, { CPU::ROL, CPU::ACC, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::BIT, CPU::ABS, 4, 0, 0 }, { CPU::AND, CPU::ABS, 4, 0, 0 }, { CPU::ROL, CPU::ABS, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::JSR, &CPU::ABS, 6, 0, 0 }, { &CPU::AND, &CPU::IDX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::BIT, &CPU::ZPG, 3, 0, 0 }, { &CPU::AND, &CPU::ZPG, 3, 0, 0 }, { &CPU::ROL, &CPU::ZPG, 5, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::PLP, &CPU::IMP, 4, 0, 0 }, { &CPU::AND, &CPU::IMM, 2, 0, 0 }, { &CPU::ROL, &CPU::ACC, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::BIT, &CPU::ABS, 4, 0, 0 }, { &CPU::AND, &CPU::ABS, 4, 0, 0 }, { &CPU::ROL, &CPU::ABS, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x30 - 0x3f
-	{ CPU::BMI, CPU::REL, 2, 1, 1 }, { CPU::AND, CPU::IDY, 5, 1, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPX, 4, 0, 0 }, { CPU::AND, CPU::ZPX, 4, 0, 0 }, { CPU::ROL, CPU::ZPX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::SEC, CPU::IMP, 2, 0, 0 }, { CPU::AND, CPU::ABY, 4, 1, 0 }, { CPU::NOP, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ABX, 4, 1, 0 }, { CPU::AND, CPU::ABX, 4, 1, 0 }, { CPU::ROL, CPU::ABX, 7, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BMI, &CPU::REL, 2, 1, 1 }, { &CPU::AND, &CPU::IDY, 5, 1, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPX, 4, 0, 0 }, { &CPU::AND, &CPU::ZPX, 4, 0, 0 }, { &CPU::ROL, &CPU::ZPX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::SEC, &CPU::IMP, 2, 0, 0 }, { &CPU::AND, &CPU::ABY, 4, 1, 0 }, { &CPU::NOP, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ABX, 4, 1, 0 }, { &CPU::AND, &CPU::ABX, 4, 1, 0 }, { &CPU::ROL, &CPU::ABX, 7, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x40 - 0x4f
-	{ CPU::RTI, CPU::IMP, 6, 0, 0 }, { CPU::EOR, CPU::IDX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPG, 3, 0, 0 }, { CPU::EOR, CPU::ZPG, 3, 0, 0 }, { CPU::LSR, CPU::ZPG, 5, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::PHA, CPU::IMP, 3, 0, 0 }, { CPU::EOR, CPU::IMM, 2, 0, 0 }, { CPU::LSR, CPU::ACC, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::JMP, CPU::ABS, 3, 0, 0 }, { CPU::EOR, CPU::ABS, 4, 0, 0 }, { CPU::LSR, CPU::ABS, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::RTI, &CPU::IMP, 6, 0, 0 }, { &CPU::EOR, &CPU::IDX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPG, 3, 0, 0 }, { &CPU::EOR, &CPU::ZPG, 3, 0, 0 }, { &CPU::LSR, &CPU::ZPG, 5, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::PHA, &CPU::IMP, 3, 0, 0 }, { &CPU::EOR, &CPU::IMM, 2, 0, 0 }, { &CPU::LSR, &CPU::ACC, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::JMP, &CPU::ABS, 3, 0, 0 }, { &CPU::EOR, &CPU::ABS, 4, 0, 0 }, { &CPU::LSR, &CPU::ABS, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x50 - 0x5f
-	{ CPU::BVC, CPU::REL, 2, 1, 1 }, { CPU::EOR, CPU::IDY, 5, 1, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPX, 4, 0, 0 }, { CPU::EOR, CPU::ZPX, 4, 0, 0 }, { CPU::LSR, CPU::ZPX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::CLI, CPU::IMP, 2, 0, 0 }, { CPU::EOR, CPU::ABY, 4, 1, 0 }, { CPU::NOP, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ABX, 4, 1, 0 }, { CPU::EOR, CPU::ABX, 4, 1, 0 }, { CPU::LSR, CPU::ABX, 7, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BVC, &CPU::REL, 2, 1, 1 }, { &CPU::EOR, &CPU::IDY, 5, 1, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPX, 4, 0, 0 }, { &CPU::EOR, &CPU::ZPX, 4, 0, 0 }, { &CPU::LSR, &CPU::ZPX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::CLI, &CPU::IMP, 2, 0, 0 }, { &CPU::EOR, &CPU::ABY, 4, 1, 0 }, { &CPU::NOP, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ABX, 4, 1, 0 }, { &CPU::EOR, &CPU::ABX, 4, 1, 0 }, { &CPU::LSR, &CPU::ABX, 7, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x60 - 0x6f
-	{ CPU::RTS, CPU::IMP, 6, 0, 0 }, { CPU::ADC, CPU::IDX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPG, 3, 0, 0 }, { CPU::ADC, CPU::ZPG, 3, 0, 0 }, { CPU::ROR, CPU::ZPG, 5, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::PLA, CPU::IMP, 4, 0, 0 }, { CPU::ADC, CPU::IMM, 2, 0, 0 }, { CPU::ROR, CPU::ACC, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::JMP, CPU::IND, 5, 0, 0 }, { CPU::ADC, CPU::ABS, 4, 0, 0 }, { CPU::ROR, CPU::ABS, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::RTS, &CPU::IMP, 6, 0, 0 }, { &CPU::ADC, &CPU::IDX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPG, 3, 0, 0 }, { &CPU::ADC, &CPU::ZPG, 3, 0, 0 }, { &CPU::ROR, &CPU::ZPG, 5, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::PLA, &CPU::IMP, 4, 0, 0 }, { &CPU::ADC, &CPU::IMM, 2, 0, 0 }, { &CPU::ROR, &CPU::ACC, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::JMP, &CPU::IND, 5, 0, 0 }, { &CPU::ADC, &CPU::ABS, 4, 0, 0 }, { &CPU::ROR, &CPU::ABS, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x70 - 0x7f
-	{ CPU::BVS, CPU::REL, 2, 1, 1 }, { CPU::ADC, CPU::IDY, 5, 1, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPX, 4, 0, 0 }, { CPU::ADC, CPU::ZPX, 4, 0, 0 }, { CPU::ROR, CPU::ZPX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::SEI, CPU::IMP, 2, 0, 0 }, { CPU::ADC, CPU::ABY, 4, 1, 0 }, { CPU::NOP, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ABX, 4, 1, 0 }, { CPU::ADC, CPU::ABX, 4, 1, 0 }, { CPU::ROR, CPU::ABX, 7, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BVS, &CPU::REL, 2, 1, 1 }, { &CPU::ADC, &CPU::IDY, 5, 1, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPX, 4, 0, 0 }, { &CPU::ADC, &CPU::ZPX, 4, 0, 0 }, { &CPU::ROR, &CPU::ZPX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::SEI, &CPU::IMP, 2, 0, 0 }, { &CPU::ADC, &CPU::ABY, 4, 1, 0 }, { &CPU::NOP, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ABX, 4, 1, 0 }, { &CPU::ADC, &CPU::ABX, 4, 1, 0 }, { &CPU::ROR, &CPU::ABX, 7, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x80 - 0x8f
-	{ CPU::NOP, CPU::IMM, 2, 0, 0 }, { CPU::STA, CPU::IDX, 6, 0, 0 }, { CPU::NOP, CPU::IMM, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::STY, CPU::ZPG, 3, 0, 0 }, { CPU::STA, CPU::ZPG, 3, 0, 0 }, { CPU::STX, CPU::ZPG, 3, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::DEY, CPU::IMP, 2, 0, 0 }, { CPU::NOP, CPU::IMM, 2, 0, 0 }, { CPU::TXA, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::STY, CPU::ABS, 4, 0, 0 }, { CPU::STA, CPU::ABS, 4, 0, 0 }, { CPU::STX, CPU::ABS, 4, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::IMM, 2, 0, 0 }, { &CPU::STA, &CPU::IDX, 6, 0, 0 }, { &CPU::NOP, &CPU::IMM, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::STY, &CPU::ZPG, 3, 0, 0 }, { &CPU::STA, &CPU::ZPG, 3, 0, 0 }, { &CPU::STX, &CPU::ZPG, 3, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::DEY, &CPU::IMP, 2, 0, 0 }, { &CPU::NOP, &CPU::IMM, 2, 0, 0 }, { &CPU::TXA, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::STY, &CPU::ABS, 4, 0, 0 }, { &CPU::STA, &CPU::ABS, 4, 0, 0 }, { &CPU::STX, &CPU::ABS, 4, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0x90 - 0x9f
-	{ CPU::BCC, CPU::REL, 2, 1, 1 }, { CPU::STA, CPU::IDY, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::STY, CPU::ZPX, 4, 0, 0 }, { CPU::STA, CPU::ZPX, 4, 0, 0 }, { CPU::STX, CPU::ZPY, 4, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::TYA, CPU::IMP, 2, 0, 0 }, { CPU::STA, CPU::ABY, 5, 0, 0 }, { CPU::TXS, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::STA, CPU::ABX, 5, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BCC, &CPU::REL, 2, 1, 1 }, { &CPU::STA, &CPU::IDY, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::STY, &CPU::ZPX, 4, 0, 0 }, { &CPU::STA, &CPU::ZPX, 4, 0, 0 }, { &CPU::STX, &CPU::ZPY, 4, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::TYA, &CPU::IMP, 2, 0, 0 }, { &CPU::STA, &CPU::ABY, 5, 0, 0 }, { &CPU::TXS, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::STA, &CPU::ABX, 5, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0xa0 - 0xaf
-	{ CPU::LDY, CPU::IMM, 2, 0, 0 }, { CPU::LDA, CPU::IDX, 6, 0, 0 }, { CPU::LDX, CPU::IMM, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::LDY, CPU::ZPG, 3, 0, 0 }, { CPU::LDA, CPU::ZPG, 3, 0, 0 }, { CPU::LDX, CPU::ZPG, 3, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::TAY, CPU::IMP, 2, 0, 0 }, { CPU::LDA, CPU::IMM, 2, 0, 0 }, { CPU::TAX, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::LDY, CPU::ABS, 4, 0, 0 }, { CPU::LDA, CPU::ABS, 4, 0, 0 }, { CPU::LDX, CPU::ABS, 4, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::LDY, &CPU::IMM, 2, 0, 0 }, { &CPU::LDA, &CPU::IDX, 6, 0, 0 }, { &CPU::LDX, &CPU::IMM, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::LDY, &CPU::ZPG, 3, 0, 0 }, { &CPU::LDA, &CPU::ZPG, 3, 0, 0 }, { &CPU::LDX, &CPU::ZPG, 3, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::TAY, &CPU::IMP, 2, 0, 0 }, { &CPU::LDA, &CPU::IMM, 2, 0, 0 }, { &CPU::TAX, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::LDY, &CPU::ABS, 4, 0, 0 }, { &CPU::LDA, &CPU::ABS, 4, 0, 0 }, { &CPU::LDX, &CPU::ABS, 4, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0xb0 - 0xbf
-	{ CPU::BCS, CPU::REL, 2, 1, 1 }, { CPU::LDA, CPU::IDY, 5, 1, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::LDY, CPU::ZPX, 4, 0, 0 }, { CPU::LDA, CPU::ZPX, 4, 0, 0 }, { CPU::LDX, CPU::ZPY, 4, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::CLV, CPU::IMP, 2, 0, 0 }, { CPU::LDA, CPU::ABY, 4, 1, 0 }, { CPU::TSX, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::LDY, CPU::ABX, 4, 1, 0 }, { CPU::LDA, CPU::ABX, 4, 1, 0 }, { CPU::LDX, CPU::ABY, 4, 1, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BCS, &CPU::REL, 2, 1, 1 }, { &CPU::LDA, &CPU::IDY, 5, 1, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::LDY, &CPU::ZPX, 4, 0, 0 }, { &CPU::LDA, &CPU::ZPX, 4, 0, 0 }, { &CPU::LDX, &CPU::ZPY, 4, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::CLV, &CPU::IMP, 2, 0, 0 }, { &CPU::LDA, &CPU::ABY, 4, 1, 0 }, { &CPU::TSX, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::LDY, &CPU::ABX, 4, 1, 0 }, { &CPU::LDA, &CPU::ABX, 4, 1, 0 }, { &CPU::LDX, &CPU::ABY, 4, 1, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0xc0 - 0xcf
-	{ CPU::CPY, CPU::IMM, 2, 0, 0 }, { CPU::CMP, CPU::IDX, 6, 0, 0 }, { CPU::NOP, CPU::IMM, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::CPY, CPU::ZPG, 3, 0, 0 }, { CPU::CMP, CPU::ZPG, 3, 0, 0 }, { CPU::DEC, CPU::ZPG, 5, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::INY, CPU::IMP, 2, 0, 0 }, { CPU::CMP, CPU::IMM, 2, 0, 0 }, { CPU::DEX, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::CPY, CPU::ABS, 4, 0, 0 }, { CPU::CMP, CPU::ABS, 4, 0, 0 }, { CPU::DEC, CPU::ABS, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::CPY, &CPU::IMM, 2, 0, 0 }, { &CPU::CMP, &CPU::IDX, 6, 0, 0 }, { &CPU::NOP, &CPU::IMM, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::CPY, &CPU::ZPG, 3, 0, 0 }, { &CPU::CMP, &CPU::ZPG, 3, 0, 0 }, { &CPU::DEC, &CPU::ZPG, 5, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::INY, &CPU::IMP, 2, 0, 0 }, { &CPU::CMP, &CPU::IMM, 2, 0, 0 }, { &CPU::DEX, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::CPY, &CPU::ABS, 4, 0, 0 }, { &CPU::CMP, &CPU::ABS, 4, 0, 0 }, { &CPU::DEC, &CPU::ABS, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0xd0 - 0xdf
-	{ CPU::BNE, CPU::REL, 2, 1, 1 }, { CPU::CMP, CPU::IDY, 5, 1, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPX, 4, 0, 0 }, { CPU::CMP, CPU::ZPX, 4, 0, 0 }, { CPU::DEC, CPU::ZPX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::CLD, CPU::IMP, 2, 0, 0 }, { CPU::CMP, CPU::ABY, 4, 1, 0 }, { CPU::NOP, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ABX, 4, 1, 0 }, { CPU::CMP, CPU::ABX, 4, 1, 0 }, { CPU::DEC, CPU::ABX, 7, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BNE, &CPU::REL, 2, 1, 1 }, { &CPU::CMP, &CPU::IDY, 5, 1, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPX, 4, 0, 0 }, { &CPU::CMP, &CPU::ZPX, 4, 0, 0 }, { &CPU::DEC, &CPU::ZPX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::CLD, &CPU::IMP, 2, 0, 0 }, { &CPU::CMP, &CPU::ABY, 4, 1, 0 }, { &CPU::NOP, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ABX, 4, 1, 0 }, { &CPU::CMP, &CPU::ABX, 4, 1, 0 }, { &CPU::DEC, &CPU::ABX, 7, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0xe0 - 0xef
-	{ CPU::CPX, CPU::IMM, 2, 0, 0 }, { CPU::SBC, CPU::IDX, 6, 0, 0 }, { CPU::NOP, CPU::IMM, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::CPX, CPU::ZPG, 3, 0, 0 }, { CPU::SBC, CPU::ZPG, 3, 0, 0 }, { CPU::INC, CPU::ZPG, 5, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::INX, CPU::IMP, 2, 0, 0 }, { CPU::SBC, CPU::IMM, 2, 0, 0 }, { CPU::NOP, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::CPX, CPU::ABS, 4, 0, 0 }, { CPU::SBC, CPU::ABS, 4, 0, 0 }, { CPU::INC, CPU::ABS, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::CPX, &CPU::IMM, 2, 0, 0 }, { &CPU::SBC, &CPU::IDX, 6, 0, 0 }, { &CPU::NOP, &CPU::IMM, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::CPX, &CPU::ZPG, 3, 0, 0 }, { &CPU::SBC, &CPU::ZPG, 3, 0, 0 }, { &CPU::INC, &CPU::ZPG, 5, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::INX, &CPU::IMP, 2, 0, 0 }, { &CPU::SBC, &CPU::IMM, 2, 0, 0 }, { &CPU::NOP, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::CPX, &CPU::ABS, 4, 0, 0 }, { &CPU::SBC, &CPU::ABS, 4, 0, 0 }, { &CPU::INC, &CPU::ABS, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 	// 0xf0 - 0xff
-	{ CPU::BEQ, CPU::REL, 2, 1, 1 }, { CPU::SBC, CPU::IDY, 5, 1, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ZPX, 4, 0, 0 }, { CPU::SBC, CPU::ZPX, 4, 0, 0 }, { CPU::INC, CPU::ZPX, 6, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::SED, CPU::IMP, 2, 0, 0 }, { CPU::SBC, CPU::ABY, 4, 1, 0 }, { CPU::NOP, CPU::IMP, 2, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
-	{ CPU::NOP, CPU::ABX, 4, 1, 0 }, { CPU::SBC, CPU::ABX, 4, 1, 0 }, { CPU::INC, CPU::ABX, 7, 0, 0 }, { CPU::KIL, CPU::IMP, 0, 0, 0 },
+	{ &CPU::BEQ, &CPU::REL, 2, 1, 1 }, { &CPU::SBC, &CPU::IDY, 5, 1, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ZPX, 4, 0, 0 }, { &CPU::SBC, &CPU::ZPX, 4, 0, 0 }, { &CPU::INC, &CPU::ZPX, 6, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::SED, &CPU::IMP, 2, 0, 0 }, { &CPU::SBC, &CPU::ABY, 4, 1, 0 }, { &CPU::NOP, &CPU::IMP, 2, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
+	{ &CPU::NOP, &CPU::ABX, 4, 1, 0 }, { &CPU::SBC, &CPU::ABX, 4, 1, 0 }, { &CPU::INC, &CPU::ABX, 7, 0, 0 }, { &CPU::KIL, &CPU::IMP, 0, 0, 0 },
 };
 
 
@@ -614,7 +614,7 @@ void CPU::ROL()
 	if (acc_mode)
 	{
 		bool carry = ac & 0x80;
-		ac = (ac << 1) | status.c;
+		ac = (ac << 1) | (status.c ? 1 : 0);
 		status.c = carry;
 		status.z = ac == 0;
 		status.n = ac & 0x80;
@@ -623,7 +623,7 @@ void CPU::ROL()
 	{
 		uint8_t data = bus.read(address);
 		bool carry = data & 0x80;
-		data = (data << 1) | status.c;
+		data = (data << 1) | (status.c ? 1 : 0);
 		bus.write(address, data);
 		status.c = carry;
 		status.z = data == 0;
