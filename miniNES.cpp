@@ -26,7 +26,7 @@ int main(int argc, char* args[])
 	auto keystate = SDL_GetKeyboardState(NULL);
 	auto window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
 	auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
-	auto texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WIDTH, HEIGHT);
+	auto texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, WIDTH, HEIGHT);
 	auto audio = SDL_OpenAudioDevice(NULL, 0, &want, &have, 0);
 	SDL_PauseAudioDevice(audio, 0);
 
@@ -77,7 +77,6 @@ int main(int argc, char* args[])
 
 		SDL_QueueAudio(audio, nes.get_audio(), 1600);
 		SDL_UpdateTexture(texture, NULL, nes.get_video(), WIDTH * sizeof(uint32_t));
-		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
 	}
