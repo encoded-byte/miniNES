@@ -33,7 +33,9 @@ void Machine::reset()
 	cpu.reset();
 	dma.reset();
 	inp.reset();
+	pal.reset();
 	ppu.reset();
+	ram.reset();
 
 	cpu.nmi(ppu.is_nmi());
 	cpu.irq(cart.is_irq());

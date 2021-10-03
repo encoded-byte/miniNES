@@ -21,3 +21,18 @@ void PRAM::write(uint16_t addr, uint8_t data)
 	addr &= (addr & 0x03) ? 0x1f : 0x0f;
 	mem[addr] = data;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                 SIGNALS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// Signal: Reset
+void PRAM::reset()
+{
+	for (auto &data : mem)
+		data = 0;
+}
