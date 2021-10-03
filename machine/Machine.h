@@ -16,6 +16,7 @@ class Machine
 {
 private:
 	static const uint16_t frame_length {1789800 / 60};
+	bool ready;
 
 	Bus   cpu_bus;
 	Bus   ppu_bus;
@@ -31,7 +32,11 @@ private:
 public:
 	Machine();
 	void load(const std::string &filename);
+	void unload() { ready = 0; }
 	void change(uint8_t disk) { cart.change(disk); }
+
+	// Status
+	bool is_ready() const { return ready; }
 
 	// IO
 	void set_input(uint8_t index, uint8_t input) { inp.set_input(index, input); }

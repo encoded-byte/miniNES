@@ -1,7 +1,7 @@
 #include "machine/Machine.h"
 
 
-Machine::Machine()
+Machine::Machine() : ready (0)
 {
 	cpu_bus.add(ram,  0x0000, 0x1fff, 0);
 	cpu_bus.add(ppu,  0x2000, 0x3fff, 0);
@@ -21,6 +21,7 @@ void Machine::load(const std::string &filename)
 {
 	cart.load(filename);
 	reset();
+	ready = 1;
 }
 
 
@@ -51,6 +52,8 @@ void Machine::reset()
 // Signal: Frame
 void Machine::frame()
 {
+	if (!ready) return;
+
 	for (uint16_t i = 0; i != frame_length; ++i)
 	{
 		ppu.clock();
