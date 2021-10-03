@@ -17,6 +17,12 @@ Machine::Machine()
 	ppu_bus.add(pal,  0x3f00, 0x3fff, 0);
 }
 
+void Machine::load(const std::string &filename)
+{
+	cart.load(filename);
+	reset();
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 //

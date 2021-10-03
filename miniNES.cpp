@@ -1,4 +1,5 @@
 #include <filesystem>
+#include <string>
 #include <SDL2/SDL.h>
 #include "machine/Machine.h"
 
@@ -30,9 +31,8 @@ int main(int argc, char* args[])
 	auto audio = SDL_OpenAudioDevice(NULL, 0, &want, &have, 0);
 	SDL_PauseAudioDevice(audio, 0);
 
-	Machine nes;
-	nes.load(filename);
-	nes.reset();
+	Machine machine;
+	machine.load(filename);
 
 	for (bool quit = false; !quit;)
 	{
@@ -43,15 +43,15 @@ int main(int argc, char* args[])
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
 				quit = true;
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
-				nes.reset();
+				machine.reset();
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_1)
-				nes.change(0);
+				machine.change(0);
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_2)
-				nes.change(1);
+				machine.change(1);
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_3)
-				nes.change(2);
+				machine.change(2);
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_4)
-				nes.change(3);
+				machine.change(3);
 		}
 
 		uint8_t input = 0;
@@ -72,11 +72,11 @@ int main(int argc, char* args[])
 		if (keystate[SDL_SCANCODE_RIGHT])
 			input |= 0x80;
 
-		nes.set_input(0, input);
-		nes.frame();
+		machine.set_input(0, input);
+		machine.frame();
 
-		SDL_QueueAudio(audio, nes.get_audio(), 1600);
-		SDL_UpdateTexture(texture, NULL, nes.get_video(), WIDTH * sizeof(uint32_t));
+		SDL_QueueAudio(audio, machine.get_audio(), 1600);
+		SDL_UpdateTexture(texture, NULL, machine.get_video(), WIDTH * sizeof(uint32_t));
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
 	}

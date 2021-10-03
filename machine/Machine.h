@@ -30,7 +30,7 @@ private:
 
 public:
 	Machine();
-	void load(const std::string &filename) { cart.load(filename); }
+	void load(const std::string &filename);
 	void change(uint8_t disk) { cart.change(disk); }
 
 	// IO
