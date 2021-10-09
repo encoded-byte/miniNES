@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="boards\AxROM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\CNROM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\FDS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\GxROM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\MMC1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\MMC2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\MMC3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\Namco118.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\Namco163.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\Namco340.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\NROM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\Sunsoft1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\Sunsoft2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\Sunsoft3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\Sunsoft4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\Sunsoft5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\UxROM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\VRC1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\VRC3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\VRC4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\VRC6.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\VRC7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\APU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\Bus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\Cart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\DMA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\PPU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\PRAM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="devices\RAM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="machine\CPU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="machine\Machine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui-win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="boards\AxROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\CNROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\FDS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\GxROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\MMC1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\MMC2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\MMC3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Namco118.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Namco163.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Namco340.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\NROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Sunsoft1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Sunsoft2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Sunsoft3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Sunsoft4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Sunsoft5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\UxROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\VRC1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\VRC3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\VRC4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\VRC6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\VRC7.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\APU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\Bus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\Cart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\DMA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\PPU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\PRAM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\RAM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="machine\CPU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="machine\Device.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="machine\Machine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

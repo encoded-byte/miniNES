@@ -1,1 +1,5 @@
+/.vs
 /.vscode
+/bin
+/out
+*.user
