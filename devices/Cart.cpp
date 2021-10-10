@@ -16,6 +16,7 @@
 #include "boards/Sunsoft3.h"
 #include "boards/Sunsoft4.h"
 #include "boards/Sunsoft5.h"
+#include "boards/TC0190.h"
 #include "boards/UxROM.h"
 #include "boards/VRC1.h"
 #include "boards/VRC3.h"
@@ -86,6 +87,10 @@ void Cart::load(const std::string &filename)
 		case 67:  type = new Sunsoft3(info); break;
 		case 68:  type = new Sunsoft4(info); break;
 		case 69:  type = new Sunsoft5(info); break;
+
+		// Taito
+		case 33:  type = new TC0190(info); break;
+		case 48:  type = new TC0690(info); break;
 
 		// Unsupported
 		default: throw std::runtime_error("Cart: Unsupported mapper " + std::to_string(info.mapper));

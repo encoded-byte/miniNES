@@ -159,6 +159,7 @@
     <ClCompile Include="boards\Sunsoft3.cpp" />
     <ClCompile Include="boards\Sunsoft4.cpp" />
     <ClCompile Include="boards\Sunsoft5.cpp" />
+    <ClCompile Include="boards\TC0190.cpp" />
     <ClCompile Include="boards\UxROM.cpp" />
     <ClCompile Include="boards\VRC1.cpp" />
     <ClCompile Include="boards\VRC3.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="boards\Sunsoft3.h" />
     <ClInclude Include="boards\Sunsoft4.h" />
     <ClInclude Include="boards\Sunsoft5.h" />
+    <ClInclude Include="boards\TC0190.h" />
     <ClInclude Include="boards\UxROM.h" />
     <ClInclude Include="boards\VRC1.h" />
     <ClInclude Include="boards\VRC3.h" />

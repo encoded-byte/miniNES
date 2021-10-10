@@ -792,5 +792,5 @@ void CPU::RTI()
 // Instruction: KIL (Illegal Opcode)
 void CPU::KIL()
 {
-	throw std::runtime_error("CPU: KILL");
+	throw std::runtime_error("CPU: Unsupported opcode");
 }
