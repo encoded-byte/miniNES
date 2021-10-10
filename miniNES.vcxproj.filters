@@ -120,6 +120,9 @@
     <ClCompile Include="boards\TC0190.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="boards\X1005.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boards\AxROM.h">
@@ -225,6 +228,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boards\TC0190.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\X1005.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

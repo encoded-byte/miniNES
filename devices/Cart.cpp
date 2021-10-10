@@ -23,6 +23,7 @@
 #include "boards/VRC4.h"
 #include "boards/VRC6.h"
 #include "boards/VRC7.h"
+#include "boards/X1005.h"
 #include "devices/Cart.h"
 
 
@@ -60,15 +61,6 @@ void Cart::load(const std::string &filename)
 		case 118: type = new MMC3B(info); break;
 		case 10:  type = new MMC4(info); break;
 
-		// Namco
-		case 206: type = new Namco118(info); break;
-		case 88:  type = new Namco118(info); break;
-		case 76:  type = new Namco118A(info); break;
-		case 95:  type = new Namco118B(info); break;
-		case 154: type = new Namco118C(info); break;
-		case 19:  type = new Namco163(info); break;
-		case 210: type = new Namco340(info); break;
-
 		// Konami
 		case 75:  type = new VRC1(info); break;
 		case 73:  type = new VRC3(info); break;
@@ -79,6 +71,15 @@ void Cart::load(const std::string &filename)
 		case 24:  type = new VRC6(info); break;
 		case 26:  type = new VRC6(info); break;
 		case 85:  type = new VRC7(info); break;
+
+		// Namco
+		case 206: type = new Namco118(info); break;
+		case 88:  type = new Namco118(info); break;
+		case 76:  type = new Namco118A(info); break;
+		case 95:  type = new Namco118B(info); break;
+		case 154: type = new Namco118C(info); break;
+		case 19:  type = new Namco163(info); break;
+		case 210: type = new Namco340(info); break;
 
 		// Sunsoft
 		case 184: type = new Sunsoft1(info); break;
@@ -91,6 +92,8 @@ void Cart::load(const std::string &filename)
 		// Taito
 		case 33:  type = new TC0190(info); break;
 		case 48:  type = new TC0690(info); break;
+		case 80:  type = new X1005(info); break;
+		case 207: type = new X1005A(info); break;
 
 		// Unsupported
 		default: throw std::runtime_error("Cart: Unsupported mapper " + std::to_string(info.mapper));
