@@ -24,6 +24,7 @@
 #include "boards/VRC6.h"
 #include "boards/VRC7.h"
 #include "boards/X1005.h"
+#include "boards/X1017.h"
 #include "devices/Cart.h"
 
 
@@ -94,6 +95,7 @@ void Cart::load(const std::string &filename)
 		case 48:  type = new TC0690(info); break;
 		case 80:  type = new X1005(info); break;
 		case 207: type = new X1005A(info); break;
+		case 82:  type = new X1017(info); break;
 
 		// Unsupported
 		default: throw std::runtime_error("Cart: Unsupported mapper " + std::to_string(info.mapper));

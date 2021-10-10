@@ -167,6 +167,7 @@
     <ClCompile Include="boards\VRC6.cpp" />
     <ClCompile Include="boards\VRC7.cpp" />
     <ClCompile Include="boards\X1005.cpp" />
+    <ClCompile Include="boards\X1017.cpp" />
     <ClCompile Include="devices\APU.cpp" />
     <ClCompile Include="devices\Board.cpp" />
     <ClCompile Include="devices\Bus.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="boards\VRC6.h" />
     <ClInclude Include="boards\VRC7.h" />
     <ClInclude Include="boards\X1005.h" />
+    <ClInclude Include="boards\X1017.h" />
     <ClInclude Include="devices\APU.h" />
     <ClInclude Include="devices\Board.h" />
     <ClInclude Include="devices\Bus.h" />
