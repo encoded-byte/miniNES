@@ -3,6 +3,44 @@
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                             DEVICE INTERFACE
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// Device: Read
+uint8_t X1005::read(uint16_t addr)
+{
+	uint8_t data = 0;
+
+	if (addr >= 0x0000 && addr <= 0x1fff)
+		data = read_chr(addr);
+	else if (addr >= 0x2000 && addr <= 0x3eff)
+		data = read_nt(addr);
+	else if (addr >= 0x7f00 && addr <= 0x7fff)
+		data = read_ram(addr);
+	else if (addr >= 0x8000 && addr <= 0xffff)
+		data = read_prg(addr);
+
+	return data;
+}
+
+// Device: Write
+void X1005::write(uint16_t addr, uint8_t data)
+{
+	if (addr >= 0x0000 && addr <= 0x1fff)
+		write_chr(addr, data);
+	else if (addr >= 0x2000 && addr <= 0x3eff)
+		write_nt(addr, data);
+	else if (addr >= 0x7ef0 && addr <= 0x7eff)
+		write_reg(addr, data);
+	else if (addr >= 0x7f00 && addr <= 0x7fff)
+		write_ram(addr, data);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                 SIGNALS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -30,22 +68,13 @@ void X1005A::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                                RAM ACCESS
+//                                REG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
 
 
-// RAM read: 0x6000 - 0x7fff
-uint8_t X1005::read_ram(uint16_t addr)
-{
-	if (ram_enable && addr >= 0x7f00 && addr <= 0x7fff)
-		return ram[addr & 0x7f];
-
-	return 0xff;
-}
-
-// RAM write: 0x6000 - 0x7fff
-void X1005::write_ram(uint16_t addr, uint8_t data)
+// REG write: 0x7ef0 - 0x7eff
+void X1005::write_reg(uint16_t addr, uint8_t data)
 {
 	switch (addr)
 	{
@@ -64,13 +93,10 @@ void X1005::write_ram(uint16_t addr, uint8_t data)
 		prg_bank[((addr >> 1) & 0x03) - 1] = data;
 		break;
 	}
-
-	if (ram_enable && addr >= 0x7f00 && addr <= 0x7fff)
-		ram[addr & 0x7f] = data;
 }
 
-// RAM write: 0x6000 - 0x7fff
-void X1005A::write_ram(uint16_t addr, uint8_t data)
+// REG write: 0x7ef0 - 0x7eff
+void X1005A::write_reg(uint16_t addr, uint8_t data)
 {
 	switch (addr)
 	{
@@ -93,8 +119,29 @@ void X1005A::write_ram(uint16_t addr, uint8_t data)
 		prg_bank[((addr >> 1) & 0x03) - 1] = data;
 		break;
 	}
+}
 
-	if (ram_enable && addr >= 0x7f00 && addr <= 0x7fff)
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                RAM ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// RAM read: 0x7f00 - 0x7fff
+uint8_t X1005::read_ram(uint16_t addr)
+{
+	if (ram_enable)
+		return ram[addr & 0x7f];
+
+	return 0xff;
+}
+
+// RAM write: 0x7f00 - 0x7fff
+void X1005::write_ram(uint16_t addr, uint8_t data)
+{
+	if (ram_enable)
 		ram[addr & 0x7f] = data;
 }
 
@@ -175,17 +222,6 @@ uint8_t X1005::read_nt(uint16_t addr)
 	return nt_ram[addr];
 }
 
-// NT read: 0x2000 - 0x3eff
-uint8_t X1005A::read_nt(uint16_t addr)
-{
-	if (addr < 0x3000)
-		addr = addr_nt_single(addr, mirroring[0]);
-	else
-		addr = addr_nt_single(addr, mirroring[1]);
-
-	return nt_ram[addr];
-}
-
 // NT write: 0x2000 - 0x3eff
 void X1005::write_nt(uint16_t addr, uint8_t data)
 {
@@ -195,6 +231,17 @@ void X1005::write_nt(uint16_t addr, uint8_t data)
 		addr = addr_nt_horizontal(addr);
 
 	nt_ram[addr] = data;
+}
+
+// NT read: 0x2000 - 0x3eff
+uint8_t X1005A::read_nt(uint16_t addr)
+{
+	if (addr < 0x3000)
+		addr = addr_nt_single(addr, mirroring[0]);
+	else
+		addr = addr_nt_single(addr, mirroring[1]);
+
+	return nt_ram[addr];
 }
 
 // NT write: 0x2000 - 0x3eff

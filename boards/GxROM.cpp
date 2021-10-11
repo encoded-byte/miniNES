@@ -18,6 +18,21 @@ void GxROM::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void GxROM::write_reg(uint16_t addr, uint8_t data)
+{
+	prg_bank = (data >> 4) & 0x03;
+	chr_bank = data & 0x03;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                PRG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -30,13 +45,6 @@ uint8_t GxROM::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void GxROM::write_prg(uint16_t addr, uint8_t data)
-{
-	prg_bank = (data >> 4) & 0x03;
-	chr_bank = data & 0x03;
 }
 
 

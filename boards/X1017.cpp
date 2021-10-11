@@ -35,7 +35,7 @@ void X1017::write(uint16_t addr, uint8_t data)
 	else if (addr >= 0x6000 && addr <= 0x73ff)
 		write_ram(addr, data);
 	else if (addr >= 0x7ef0 && addr <= 0x7eff)
-		write_prg(addr, data);
+		write_reg(addr, data);
 }
 
 
@@ -57,6 +57,42 @@ void X1017::reset()
 		ram_enable[i] = 0;
 	chr_mode = 0;
 	mirroring = 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// PRG write: 0x7ef0 - 0x7eff
+void X1017::write_reg(uint16_t addr, uint8_t data)
+{
+	switch (addr)
+	{
+	case 0x7ef0: case 0x7ef1: case 0x7ef2:
+	case 0x7ef3: case 0x7ef4: case 0x7ef5:
+		chr_bank[addr & 0x07] = data;
+		break;
+	case 0x7ef6:
+		mirroring = data & 0x01;
+		chr_mode = (data >> 1) & 0x01;
+		break;
+	case 0x7ef7:
+		ram_enable[0] = data == 0xca;
+		break;
+	case 0x7ef8:
+		ram_enable[1] = data == 0x69;
+		break;
+	case 0x7ef9:
+		ram_enable[2] = data == 0x84;
+		break;
+	case 0x7efa: case 0x7efb: case 0x7efc:
+		prg_bank[(addr & 0x03) ^ 0x02] = data >> 2;
+		break;
+	}
 }
 
 
@@ -108,34 +144,6 @@ uint8_t X1017::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x7ef0 - 0x7eff
-void X1017::write_prg(uint16_t addr, uint8_t data)
-{
-	switch (addr)
-	{
-	case 0x7ef0: case 0x7ef1: case 0x7ef2:
-	case 0x7ef3: case 0x7ef4: case 0x7ef5:
-		chr_bank[addr & 0x07] = data;
-		break;
-	case 0x7ef6:
-		mirroring = data & 0x01;
-		chr_mode = (data >> 1) & 0x01;
-		break;
-	case 0x7ef7:
-		ram_enable[0] = data == 0xca;
-		break;
-	case 0x7ef8:
-		ram_enable[1] = data == 0x69;
-		break;
-	case 0x7ef9:
-		ram_enable[2] = data == 0x84;
-		break;
-	case 0x7efa: case 0x7efb: case 0x7efc:
-		prg_bank[(addr & 0x03) ^ 0x02] = data >> 2;
-		break;
-	}
 }
 
 

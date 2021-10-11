@@ -26,6 +26,52 @@ void MMC1::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void MMC1::write_reg(uint16_t addr, uint8_t data)
+{
+	if (data & 0x80)
+	{
+		prg_mode = 3;
+		shift = 0x10;
+		return;
+	}
+
+	bool write = shift & 0x01;
+	shift = (shift >> 1) | ((data & 0x01) << 4);
+
+	if (write)
+	{
+		switch (addr & 0xe000)
+		{
+		case 0x8000:
+			mirroring = shift & 0x03;
+			prg_mode = (shift >> 2) & 0x03;
+			chr_mode = (shift >> 4) & 0x01;
+			break;
+		case 0xa000:
+			chr_bank[0] = shift;
+			break;
+		case 0xc000:
+			chr_bank[1] = shift;
+			break;
+		case 0xe000:
+			prg_bank = shift & 0x0f;
+			ram_enable = ~shift & 0x10;
+			break;
+		}
+
+		shift = 0x10;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                RAM ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -51,12 +97,6 @@ uint8_t MMC1::read_ram(uint16_t addr)
 	return 0xff;
 }
 
-// RAM read: 0x6000 - 0x7fff
-uint8_t MMC1A::read_ram(uint16_t addr)
-{
-	return ram[addr & 0x1fff];
-}
-
 // RAM write: 0x6000 - 0x7fff
 void MMC1::write_ram(uint16_t addr, uint8_t data)
 {
@@ -73,6 +113,12 @@ void MMC1::write_ram(uint16_t addr, uint8_t data)
 
 		ram[ram_addr] = data;
 	}
+}
+
+// RAM read: 0x6000 - 0x7fff
+uint8_t MMC1A::read_ram(uint16_t addr)
+{
+	return ram[addr & 0x1fff];
 }
 
 // RAM write: 0x6000 - 0x7fff
@@ -122,44 +168,6 @@ uint8_t MMC1::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void MMC1::write_prg(uint16_t addr, uint8_t data)
-{
-	if (data & 0x80)
-	{
-		prg_mode = 3;
-		shift = 0x10;
-		return;
-	}
-
-	bool write = shift & 0x01;
-	shift = (shift >> 1) | ((data & 0x01) << 4);
-
-	if (write)
-	{
-		switch (addr & 0xe000)
-		{
-		case 0x8000:
-			mirroring = shift & 0x03;
-			prg_mode = (shift >> 2) & 0x03;
-			chr_mode = (shift >> 4) & 0x01;
-			break;
-		case 0xa000:
-			chr_bank[0] = shift;
-			break;
-		case 0xc000:
-			chr_bank[1] = shift;
-			break;
-		case 0xe000:
-			prg_bank = shift & 0x0f;
-			ram_enable = ~shift & 0x10;
-			break;
-		}
-
-		shift = 0x10;
-	}
 }
 
 

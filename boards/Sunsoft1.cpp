@@ -3,6 +3,40 @@
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                             DEVICE INTERFACE
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// Device: Read
+uint8_t Sunsoft1::read(uint16_t addr)
+{
+	uint8_t data = 0;
+
+	if (addr >= 0x0000 && addr <= 0x1fff)
+		data = read_chr(addr);
+	else if (addr >= 0x2000 && addr <= 0x3eff)
+		data = read_nt(addr);
+	else if (addr >= 0x8000 && addr <= 0xffff)
+		data = read_prg(addr);
+
+	return data;
+}
+
+// Device: Write
+void Sunsoft1::write(uint16_t addr, uint8_t data)
+{
+	if (addr >= 0x0000 && addr <= 0x1fff)
+		write_chr(addr, data);
+	else if (addr >= 0x2000 && addr <= 0x3eff)
+		write_nt(addr, data);
+	else if (addr >= 0x6000 && addr <= 0x7fff)
+		write_reg(addr, data);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                 SIGNALS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -18,13 +52,13 @@ void Sunsoft1::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                                RAM ACCESS
+//                                REG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
 
 
-// RAM write: 0x6000 - 0x7fff
-void Sunsoft1::write_ram(uint16_t addr, uint8_t data)
+// REG write: 0x6000 - 0x7fff
+void Sunsoft1::write_reg(uint16_t addr, uint8_t data)
 {
 	chr_bank[0] = data & 0x07;
 	chr_bank[1] = ((data >> 4) & 0x03) | 0x04;

@@ -11,6 +11,9 @@ protected:
 	uint8_t mirroring;
 	bool ram_enable;
 
+	// REG Access
+	void write_reg(uint16_t addr, uint8_t data) override;
+
 	// RAM Access
 	uint8_t read_ram(uint16_t addr) override;
 	void write_ram(uint16_t addr, uint8_t data) override;
@@ -28,6 +31,10 @@ protected:
 public:
 	X1005(BoardInfo info) : Board(info) {}
 
+	// Device interface
+	uint8_t read(uint16_t addr) override;
+	void write(uint16_t addr, uint8_t data) override;
+
 	// Signals
 	void reset() override;
 };
@@ -38,8 +45,8 @@ class X1005A : public X1005
 protected:
 	uint8_t mirroring[2];
 
-	// RAM Access
-	void write_ram(uint16_t addr, uint8_t data) override;
+	// REG Access
+	void write_reg(uint16_t addr, uint8_t data) override;
 
 	// NT Access
 	uint8_t read_nt(uint16_t addr) override;

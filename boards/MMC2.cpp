@@ -24,6 +24,28 @@ void MMC2::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void MMC2::write_reg(uint16_t addr, uint8_t data)
+{
+	switch (addr & 0xf000)
+	{
+	case 0xa000: prg_bank = data & 0x0f; break;
+	case 0xb000: chr_bank[0][0] = data & 0x1f; break;
+	case 0xc000: chr_bank[0][1] = data & 0x1f; break;
+	case 0xd000: chr_bank[1][0] = data & 0x1f; break;
+	case 0xe000: chr_bank[1][1] = data & 0x1f; break;
+	case 0xf000: mirroring = data & 0x01; break;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                RAM ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -83,20 +105,6 @@ uint8_t MMC4::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void MMC2::write_prg(uint16_t addr, uint8_t data)
-{
-	switch (addr & 0xf000)
-	{
-	case 0xa000: prg_bank = data & 0x0f; break;
-	case 0xb000: chr_bank[0][0] = data & 0x1f; break;
-	case 0xc000: chr_bank[0][1] = data & 0x1f; break;
-	case 0xd000: chr_bank[1][0] = data & 0x1f; break;
-	case 0xe000: chr_bank[1][1] = data & 0x1f; break;
-	case 0xf000: mirroring = data & 0x01; break;
-	}
 }
 
 

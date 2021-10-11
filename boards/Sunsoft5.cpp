@@ -35,6 +35,55 @@ void Sunsoft5::clock()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void Sunsoft5::write_reg(uint16_t addr, uint8_t data)
+{
+	if ((addr & 0xe000) == 0x8000)
+	{
+		command = data & 0x0f;
+	}
+	else if ((addr & 0xe000) == 0xa000)
+	{
+		switch (command)
+		{
+		case 0x00: case 0x01: case 0x02: case 0x03:
+		case 0x04: case 0x05: case 0x06: case 0x07:
+			chr_bank[command] = data;
+			break;
+		case 0x08:
+			prg_bank[0] = data & 0x3f;
+			ram_select = data & 0x40;
+			ram_enable = data & 0x80;
+			break;
+		case 0x09: case 0x0a: case 0x0b:
+			prg_bank[command - 8] = data & 0x3f;
+			break;
+		case 0x0c:
+			mirroring = data & 0x03;
+			break;
+		case 0x0d:
+			irq_enable = data & 0x01;
+			irq_decrement = data & 0x80;
+			irq_request = 0;
+			break;
+		case 0x0e:
+			irq_counter = (irq_counter & 0xff00) | data;
+			break;
+		case 0x0f:
+			irq_counter = (irq_counter & 0x00ff) | data << 8;
+			break;
+		}
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                RAM ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -87,47 +136,6 @@ uint8_t Sunsoft5::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void Sunsoft5::write_prg(uint16_t addr, uint8_t data)
-{
-	if ((addr & 0xe000) == 0x8000)
-	{
-		command = data & 0x0f;
-	}
-	else if ((addr & 0xe000) == 0xa000)
-	{
-		switch (command)
-		{
-		case 0x00: case 0x01: case 0x02: case 0x03:
-		case 0x04: case 0x05: case 0x06: case 0x07:
-			chr_bank[command] = data;
-			break;
-		case 0x08:
-			prg_bank[0] = data & 0x3f;
-			ram_select = data & 0x40;
-			ram_enable = data & 0x80;
-			break;
-		case 0x09: case 0x0a: case 0x0b:
-			prg_bank[command - 8] = data & 0x3f;
-			break;
-		case 0x0c:
-			mirroring = data & 0x03;
-			break;
-		case 0x0d:
-			irq_enable = data & 0x01;
-			irq_decrement = data & 0x80;
-			irq_request = 0;
-			break;
-		case 0x0e:
-			irq_counter = (irq_counter & 0xff00) | data;
-			break;
-		case 0x0f:
-			irq_counter = (irq_counter & 0x00ff) | data << 8;
-			break;
-		}
-	}
 }
 
 

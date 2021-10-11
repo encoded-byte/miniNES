@@ -34,30 +34,13 @@ void Sunsoft3::clock()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                                PRG ACCESS
+//                                REG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
 
 
-// PRG read: 0x8000 - 0xffff
-uint8_t Sunsoft3::read_prg(uint16_t addr)
-{
-	uint32_t bank_offset = 0;
-
-	switch (addr & 0xc000)
-	{
-	case 0x8000: bank_offset = prg_bank << 14; break;
-	case 0xc000: bank_offset = info.prg_size - 0x4000; break;
-	}
-
-	uint32_t prg_addr = (addr & 0x3fff) | bank_offset;
-	prg_addr &= info.prg_size - 1;
-
-	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void Sunsoft3::write_prg(uint16_t addr, uint8_t data)
+// REG write: 0x8000 - 0xffff
+void Sunsoft3::write_reg(uint16_t addr, uint8_t data)
 {
 	switch (addr & 0xf800)
 	{
@@ -84,6 +67,31 @@ void Sunsoft3::write_prg(uint16_t addr, uint8_t data)
 		prg_bank = data & 0x0f;
 		break;
 	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                PRG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// PRG read: 0x8000 - 0xffff
+uint8_t Sunsoft3::read_prg(uint16_t addr)
+{
+	uint32_t bank_offset = 0;
+
+	switch (addr & 0xc000)
+	{
+	case 0x8000: bank_offset = prg_bank << 14; break;
+	case 0xc000: bank_offset = info.prg_size - 0x4000; break;
+	}
+
+	uint32_t prg_addr = (addr & 0x3fff) | bank_offset;
+	prg_addr &= info.prg_size - 1;
+
+	return prg[prg_addr];
 }
 
 

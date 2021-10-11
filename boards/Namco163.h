@@ -14,9 +14,9 @@ protected:
 	bool irq_enable;
 	bool irq_request;
 
-	// IRQ Access
-	uint8_t read_irq(uint16_t addr);
-	void write_irq(uint16_t addr, uint8_t data);
+	// REG Access
+	uint8_t read_reg(uint16_t addr) override;
+	void write_reg(uint16_t addr, uint8_t data) override;
 
 	// RAM Access
 	uint8_t read_ram(uint16_t addr) override;
@@ -24,7 +24,6 @@ protected:
 
 	// PRG Access
 	uint8_t read_prg(uint16_t addr) override;
-	void write_prg(uint16_t addr, uint8_t data) override;
 
 	// CHR Access
 	uint8_t read_chr(uint16_t addr) override;
@@ -39,6 +38,10 @@ public:
 
 	// Status
 	bool is_irq() const override { return irq_request; }
+
+	// Device interface
+	uint8_t read(uint16_t addr) override;
+	void write(uint16_t addr, uint8_t data) override;
 
 	// Signals
 	void reset() override;

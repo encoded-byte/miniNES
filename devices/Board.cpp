@@ -63,7 +63,7 @@ void Board::write(uint16_t addr, uint8_t data)
 	else if (addr >= 0x6000 && addr <= 0x7fff)
 		write_ram(addr, data);
 	else if (addr >= 0x8000 && addr <= 0xffff)
-		write_prg(addr, data);
+		write_reg(addr, data);
 }
 
 

@@ -113,8 +113,6 @@ void FDS::write(uint16_t addr, uint8_t data)
 		write_reg(addr, data);
 	else if (addr >= 0x6000 && addr <= 0xdfff)
 		write_ram(addr, data);
-	else if (addr >= 0xe000 && addr <= 0xffff)
-		write_prg(addr, data);
 }
 
 

@@ -3,6 +3,48 @@
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                             DEVICE INTERFACE
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// Device: Read
+uint8_t Namco163::read(uint16_t addr)
+{
+	uint8_t data = 0;
+
+	if (addr >= 0x0000 && addr <= 0x1fff)
+		data = read_chr(addr);
+	else if (addr >= 0x2000 && addr <= 0x3eff)
+		data = read_nt(addr);
+	else if (addr >= 0x5000 && addr <= 0x5fff)
+		data = read_reg(addr);
+	else if (addr >= 0x6000 && addr <= 0x7fff)
+		data = read_ram(addr);
+	else if (addr >= 0x8000 && addr <= 0xffff)
+		data = read_prg(addr);
+
+	return data;
+}
+
+// Device: Write
+void Namco163::write(uint16_t addr, uint8_t data)
+{
+	if (addr >= 0x0000 && addr <= 0x1fff)
+		write_chr(addr, data);
+	else if (addr >= 0x2000 && addr <= 0x3eff)
+		write_nt(addr, data);
+	else if (addr >= 0x5000 && addr <= 0x5fff)
+		write_reg(addr, data);
+	else if (addr >= 0x6000 && addr <= 0x7fff)
+		write_ram(addr, data);
+	else if (addr >= 0x8000 && addr <= 0xffff)
+		write_reg(addr, data);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                 SIGNALS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -34,40 +76,63 @@ void Namco163::clock()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                                IRQ ACCESS
+//                                REG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
 
 
-// IRQ read: 0x5000 - 0x5fff
-uint8_t Namco163::read_irq(uint16_t addr)
+// REG read: 0x5000 - 0x5fff
+uint8_t Namco163::read_reg(uint16_t addr)
 {
 	uint8_t data = 0;
 
 	switch (addr & 0xf800)
 	{
-	case 0x5000: data = irq_counter & 0xff; break;
-	case 0x5800: data = irq_counter >> 8; break;
+	case 0x5000:
+		data = irq_counter & 0xff;
+		break;
+	case 0x5800:
+		data = irq_counter >> 8;
+		break;
 	}
 
 	return data;
 }
 
-// IRQ write: 0x5000 - 0x5fff
-void Namco163::write_irq(uint16_t addr, uint8_t data)
+// REG write: 0x5000 - 0x5fff / 0x8000 - 0xffff
+void Namco163::write_reg(uint16_t addr, uint8_t data)
 {
 	switch (addr & 0xf800)
 	{
 	case 0x5000:
 		irq_counter = (irq_counter & 0xff00) | data;
+		irq_request = 0;
 		break;
 	case 0x5800:
 		irq_counter = (irq_counter & 0x00ff) | (data & 0x7f) << 8;
 		irq_enable = data & 0x80;
+		irq_request = 0;
+		break;
+	case 0x8000: case 0x8800: case 0x9000: case 0x9800:
+	case 0xa000: case 0xa800: case 0xb000: case 0xb800:
+	case 0xc000: case 0xc800: case 0xd000: case 0xd800:
+		chr_bank[(addr >> 11) & 0x0f] = data;
+		break;
+	case 0xe000: case 0xf000:
+		prg_bank[(addr >> 11) & 0x03] = data & 0x3f;
+		break;
+	case 0xe800:
+		prg_bank[1] = data & 0x3f;
+		nt_ram_enable[0] = ~data & 0x40;
+		nt_ram_enable[1] = ~data & 0x80;
+		break;
+	case 0xf800:
+		ram_enable[0] = ~data & 0x01;
+		ram_enable[1] = ~data & 0x02;
+		ram_enable[2] = ~data & 0x04;
+		ram_enable[3] = ~data & 0x08;
 		break;
 	}
-
-	irq_request = 0;
 }
 
 
@@ -116,33 +181,6 @@ uint8_t Namco163::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void Namco163::write_prg(uint16_t addr, uint8_t data)
-{
-	switch (addr & 0xf800)
-	{
-	case 0x8000: case 0x8800: case 0x9000: case 0x9800:
-	case 0xa000: case 0xa800: case 0xb000: case 0xb800:
-	case 0xc000: case 0xc800: case 0xd000: case 0xd800:
-		chr_bank[(addr >> 11) & 0x0f] = data;
-		break;
-	case 0xe000: case 0xf000:
-		prg_bank[(addr >> 11) & 0x03] = data & 0x3f;
-		break;
-	case 0xe800:
-		prg_bank[1] = data & 0x3f;
-		nt_ram_enable[0] = ~data & 0x40;
-		nt_ram_enable[1] = ~data & 0x80;
-		break;
-	case 0xf800:
-		ram_enable[0] = ~data & 0x01;
-		ram_enable[1] = ~data & 0x02;
-		ram_enable[2] = ~data & 0x04;
-		ram_enable[3] = ~data & 0x08;
-		break;
-	}
 }
 
 

@@ -51,55 +51,13 @@ void VRC4::clock()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                                RAM ACCESS
+//                                REG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
 
 
-// RAM read: 0x6000 - 0x7fff
-uint8_t VRC4::read_ram(uint16_t addr)
-{
-	return ram[addr & 0x1fff];
-}
-
-// RAM write: 0x6000 - 0x7fff
-void VRC4::write_ram(uint16_t addr, uint8_t data)
-{
-	ram[addr & 0x1fff] = data;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//                                PRG ACCESS
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-// PRG read: 0x8000 - 0xffff
-uint8_t VRC4::read_prg(uint16_t addr)
-{
-	uint32_t bank_offset = 0;
-
-	if (prg_mode && (addr & 0x2000) == 0)
-		addr ^= 0x4000;
-
-	switch (addr & 0xe000)
-	{
-	case 0x8000: bank_offset = prg_bank[0] << 13; break;
-	case 0xa000: bank_offset = prg_bank[1] << 13; break;
-	case 0xc000: bank_offset = info.prg_size - 0x4000; break;
-	case 0xe000: bank_offset = info.prg_size - 0x2000; break;
-	}
-
-	uint32_t prg_addr = (addr & 0x1fff) | bank_offset;
-	prg_addr &= info.prg_size - 1;
-
-	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void VRC4::write_prg(uint16_t addr, uint8_t data)
+// REG write: 0x8000 - 0xffff
+void VRC4::write_reg(uint16_t addr, uint8_t data)
 {
 	if (info.mapper == 22 || (info.mapper == 25 && info.submapper != 2))
 		addr = (addr & 0xf000) | ((addr << 1) & 0x02) | ((addr >> 1) & 0x01);
@@ -166,6 +124,56 @@ void VRC4::write_prg(uint16_t addr, uint8_t data)
 		irq_enable = irq_repeat;
 		break;
 	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                RAM ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// RAM read: 0x6000 - 0x7fff
+uint8_t VRC4::read_ram(uint16_t addr)
+{
+	return ram[addr & 0x1fff];
+}
+
+// RAM write: 0x6000 - 0x7fff
+void VRC4::write_ram(uint16_t addr, uint8_t data)
+{
+	ram[addr & 0x1fff] = data;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                PRG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// PRG read: 0x8000 - 0xffff
+uint8_t VRC4::read_prg(uint16_t addr)
+{
+	uint32_t bank_offset = 0;
+
+	if (prg_mode && (addr & 0x2000) == 0)
+		addr ^= 0x4000;
+
+	switch (addr & 0xe000)
+	{
+	case 0x8000: bank_offset = prg_bank[0] << 13; break;
+	case 0xa000: bank_offset = prg_bank[1] << 13; break;
+	case 0xc000: bank_offset = info.prg_size - 0x4000; break;
+	case 0xe000: bank_offset = info.prg_size - 0x2000; break;
+	}
+
+	uint32_t prg_addr = (addr & 0x1fff) | bank_offset;
+	prg_addr &= info.prg_size - 1;
+
+	return prg[prg_addr];
 }
 
 

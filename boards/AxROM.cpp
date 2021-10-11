@@ -24,6 +24,27 @@ void AxROM::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void BNROM::write_reg(uint16_t addr, uint8_t data)
+{
+	prg_bank = data & 0x03;
+}
+
+// REG write: 0x8000 - 0xffff
+void AxROM::write_reg(uint16_t addr, uint8_t data)
+{
+	prg_bank = data & 0x03;
+	nt_bank = (data >> 4) & 0x01;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                PRG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -36,19 +57,6 @@ uint8_t BNROM::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void BNROM::write_prg(uint16_t addr, uint8_t data)
-{
-	prg_bank = data & 0x03;
-}
-
-// PRG write: 0x8000 - 0xffff
-void AxROM::write_prg(uint16_t addr, uint8_t data)
-{
-	prg_bank = data & 0x03;
-	nt_bank = (data >> 4) & 0x01;
 }
 
 

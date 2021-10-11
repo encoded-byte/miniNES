@@ -45,8 +45,8 @@ protected:
 	bool mirroring;
 
 	// REG Access
-	uint8_t read_reg(uint16_t addr);
-	void write_reg(uint16_t addr, uint8_t data);
+	uint8_t read_reg(uint16_t addr) override;
+	void write_reg(uint16_t addr, uint8_t data) override;
 
 	// RAM Access
 	uint8_t read_ram(uint16_t addr) override;

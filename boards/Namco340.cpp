@@ -22,6 +22,36 @@ void Namco340::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void Namco340::write_reg(uint16_t addr, uint8_t data)
+{
+	switch (addr & 0xf800)
+	{
+	case 0x8000: case 0x8800: case 0x9000: case 0x9800:
+	case 0xa000: case 0xa800: case 0xb000: case 0xb800:
+		chr_bank[(addr >> 11) & 0x07] = data;
+		break;
+	case 0xc000:
+		ram_enable = data & 0x01;
+		break;
+	case 0xe000:
+		prg_bank[0] = data & 0x3f;
+		mirroring = data >> 6;
+		break;
+	case 0xe800: case 0xf000:
+		prg_bank[(addr >> 11) & 0x03] = data & 0x3f;
+		break;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                RAM ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -65,28 +95,6 @@ uint8_t Namco340::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void Namco340::write_prg(uint16_t addr, uint8_t data)
-{
-	switch (addr & 0xf800)
-	{
-	case 0x8000: case 0x8800: case 0x9000: case 0x9800:
-	case 0xa000: case 0xa800: case 0xb000: case 0xb800:
-		chr_bank[(addr >> 11) & 0x07] = data;
-		break;
-	case 0xc000:
-		ram_enable = data & 0x01;
-		break;
-	case 0xe000:
-		prg_bank[0] = data & 0x3f;
-		mirroring = data >> 6;
-		break;
-	case 0xe800: case 0xf000:
-		prg_bank[(addr >> 11) & 0x03] = data & 0x3f;
-		break;
-	}
 }
 
 

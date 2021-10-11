@@ -45,6 +45,49 @@ void VRC3::clock()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void VRC3::write_reg(uint16_t addr, uint8_t data)
+{
+	switch (addr & 0xf000)
+	{
+	case 0x8000:
+		irq_reload = (irq_reload & 0xfff0) | (data & 0x0f);
+		break;
+	case 0x9000:
+		irq_reload = (irq_reload & 0xff0f) | (data & 0x0f) << 4;
+		break;
+	case 0xa000:
+		irq_reload = (irq_reload & 0xf0ff) | (data & 0x0f) << 8;
+		break;
+	case 0xb000:
+		irq_reload = (irq_reload & 0x0fff) | (data & 0x0f) << 12;
+		break;
+	case 0xc000:
+		irq_request = 0;
+		irq_repeat = data & 0x01;
+		irq_enable = data & 0x02;
+		irq_mode = data & 0x04;
+		if (irq_enable)
+			irq_counter = irq_reload;
+		break;
+	case 0xd000:
+		irq_request = 0;
+		irq_enable = irq_repeat;
+		break;
+	case 0xf000:
+		prg_bank = data & 0x07;
+		break;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                RAM ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -85,41 +128,6 @@ uint8_t VRC3::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void VRC3::write_prg(uint16_t addr, uint8_t data)
-{
-	switch (addr & 0xf000)
-	{
-	case 0x8000:
-		irq_reload = (irq_reload & 0xfff0) | (data & 0x0f);
-		break;
-	case 0x9000:
-		irq_reload = (irq_reload & 0xff0f) | (data & 0x0f) << 4;
-		break;
-	case 0xa000:
-		irq_reload = (irq_reload & 0xf0ff) | (data & 0x0f) << 8;
-		break;
-	case 0xb000:
-		irq_reload = (irq_reload & 0x0fff) | (data & 0x0f) << 12;
-		break;
-	case 0xc000:
-		irq_request = 0;
-		irq_repeat = data & 0x01;
-		irq_enable = data & 0x02;
-		irq_mode = data & 0x04;
-		if (irq_enable)
-			irq_counter = irq_reload;
-		break;
-	case 0xd000:
-		irq_request = 0;
-		irq_enable = irq_repeat;
-		break;
-	case 0xf000:
-		prg_bank = data & 0x07;
-		break;
-	}
 }
 
 

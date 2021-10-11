@@ -47,32 +47,13 @@ void TC0690::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                                PRG ACCESS
+//                                REG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
 
 
-// PRG read: 0x8000 - 0xffff
-uint8_t TC0190::read_prg(uint16_t addr)
-{
-	uint32_t bank_offset = 0;
-
-	switch (addr & 0xe000)
-	{
-	case 0x8000: bank_offset = prg_bank[0] << 13; break;
-	case 0xa000: bank_offset = prg_bank[1] << 13; break;
-	case 0xc000: bank_offset = info.prg_size - 0x4000; break;
-	case 0xe000: bank_offset = info.prg_size - 0x2000; break;
-	}
-
-	uint32_t prg_addr = (addr & 0x1fff) | bank_offset;
-	prg_addr &= info.prg_size - 1;
-
-	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void TC0190::write_prg(uint16_t addr, uint8_t data)
+// REG write: 0x8000 - 0xffff
+void TC0190::write_reg(uint16_t addr, uint8_t data)
 {
 	switch (addr & 0xa003)
 	{
@@ -92,8 +73,8 @@ void TC0190::write_prg(uint16_t addr, uint8_t data)
 	}
 }
 
-// PRG write: 0x8000 - 0xffff
-void TC0690::write_prg(uint16_t addr, uint8_t data)
+// REG write: 0x8000 - 0xffff
+void TC0690::write_reg(uint16_t addr, uint8_t data)
 {
 	switch (addr & 0xe003)
 	{
@@ -123,6 +104,33 @@ void TC0690::write_prg(uint16_t addr, uint8_t data)
 		mirroring = (data >> 6) & 0x01;
 		break;
 	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                PRG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// PRG read: 0x8000 - 0xffff
+uint8_t TC0190::read_prg(uint16_t addr)
+{
+	uint32_t bank_offset = 0;
+
+	switch (addr & 0xe000)
+	{
+	case 0x8000: bank_offset = prg_bank[0] << 13; break;
+	case 0xa000: bank_offset = prg_bank[1] << 13; break;
+	case 0xc000: bank_offset = info.prg_size - 0x4000; break;
+	case 0xe000: bank_offset = info.prg_size - 0x2000; break;
+	}
+
+	uint32_t prg_addr = (addr & 0x1fff) | bank_offset;
+	prg_addr &= info.prg_size - 1;
+
+	return prg[prg_addr];
 }
 
 

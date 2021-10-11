@@ -26,6 +26,29 @@ void Sunsoft2A::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void Sunsoft2::write_reg(uint16_t addr, uint8_t data)
+{
+	prg_bank = (data >> 4) & 0x07;
+	chr_enable = data & 0x01;
+}
+
+// REG write: 0x8000 - 0xffff
+void Sunsoft2A::write_reg(uint16_t addr, uint8_t data)
+{
+	Sunsoft2::write_reg(addr, data);
+	chr_bank = ((data >> 4) & 0x08) | (data & 0x07);
+	nt_bank = (data >> 3) & 0x01;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                PRG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -48,21 +71,6 @@ uint8_t Sunsoft2::read_prg(uint16_t addr)
 	return prg[prg_addr];
 }
 
-// PRG write: 0x8000 - 0xffff
-void Sunsoft2::write_prg(uint16_t addr, uint8_t data)
-{
-	prg_bank = (data >> 4) & 0x07;
-	chr_enable = data & 0x01;
-}
-
-// PRG write: 0x8000 - 0xffff
-void Sunsoft2A::write_prg(uint16_t addr, uint8_t data)
-{
-	Sunsoft2::write_prg(addr, data);
-	chr_bank = ((data >> 4) & 0x08) | (data & 0x07);
-	nt_bank = (data >> 3) & 0x01;
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -77,6 +85,13 @@ uint8_t Sunsoft2::read_chr(uint16_t addr)
 	return chr_enable ? chr_ram[addr] : 0xff;
 }
 
+// CHR write: 0x0000 - 0x1fff
+void Sunsoft2::write_chr(uint16_t addr, uint8_t data)
+{
+	if (chr_enable)
+		chr_ram[addr] = data;
+}
+
 // CHR read: 0x0000 - 0x1fff
 uint8_t Sunsoft2A::read_chr(uint16_t addr)
 {
@@ -84,13 +99,6 @@ uint8_t Sunsoft2A::read_chr(uint16_t addr)
 	chr_addr &= info.chr_size - 1;
 
 	return chr[chr_addr];
-}
-
-// CHR write: 0x0000 - 0x1fff
-void Sunsoft2::write_chr(uint16_t addr, uint8_t data)
-{
-	if (chr_enable)
-		chr_ram[addr] = data;
 }
 
 

@@ -17,6 +17,20 @@ void CNROM::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void CNROM::write_reg(uint16_t addr, uint8_t data)
+{
+	chr_bank = data & 0x03;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                PRG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -28,12 +42,6 @@ uint8_t CNROM::read_prg(uint16_t addr)
 	uint32_t prg_addr = addr & (info.prg_size - 1);
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void CNROM::write_prg(uint16_t addr, uint8_t data)
-{
-	chr_bank = data & 0x03;
 }
 
 

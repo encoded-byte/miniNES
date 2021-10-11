@@ -26,6 +26,31 @@ void Namco118C::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void Namco118::write_reg(uint16_t addr, uint8_t data)
+{
+	switch (addr & 0xe001)
+	{
+	case 0x8000: bank_select = data & 0x07; break;
+	case 0x8001: bank_data[bank_select] = data & 0x3f; break;
+	}
+}
+
+// REG write: 0x8000 - 0xffff
+void Namco118C::write_reg(uint16_t addr, uint8_t data)
+{
+	Namco118::write_reg(addr, data);
+	nt_bank = (data >> 6) & 0x01;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                PRG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -48,23 +73,6 @@ uint8_t Namco118::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void Namco118::write_prg(uint16_t addr, uint8_t data)
-{
-	switch (addr & 0xe001)
-	{
-	case 0x8000: bank_select = data & 0x07; break;
-	case 0x8001: bank_data[bank_select] = data & 0x3f; break;
-	}
-}
-
-// PRG write: 0x8000 - 0xffff
-void Namco118C::write_prg(uint16_t addr, uint8_t data)
-{
-	Namco118::write_prg(addr, data);
-	nt_bank = (data >> 6) & 0x01;
 }
 
 
@@ -136,14 +144,6 @@ uint8_t Namco118B::read_nt(uint16_t addr)
 	return nt_ram[addr];
 }
 
-// NT read: 0x2000 - 0x3eff
-uint8_t Namco118C::read_nt(uint16_t addr)
-{
-	addr = addr_nt_single(addr, nt_bank);
-
-	return nt_ram[addr];
-}
-
 // NT write: 0x2000 - 0x3eff
 void Namco118B::write_nt(uint16_t addr, uint8_t data)
 {
@@ -151,6 +151,14 @@ void Namco118B::write_nt(uint16_t addr, uint8_t data)
 	addr = addr_nt_single(addr, (bank_data[bank] >> 5) & 0x01);
 
 	nt_ram[addr] = data;
+}
+
+// NT read: 0x2000 - 0x3eff
+uint8_t Namco118C::read_nt(uint16_t addr)
+{
+	addr = addr_nt_single(addr, nt_bank);
+
+	return nt_ram[addr];
 }
 
 // NT write: 0x2000 - 0x3eff

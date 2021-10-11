@@ -24,6 +24,36 @@ void Sunsoft4::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void Sunsoft4::write_reg(uint16_t addr, uint8_t data)
+{
+	switch (addr & 0xf000)
+	{
+	case 0x8000: case 0x9000: case 0xa000: case 0xb000:
+		chr_bank[(addr >> 12) & 0x03] = data;
+		break;
+	case 0xc000: case 0xd000:
+		nt_bank[(addr >> 12) & 0x01] = (data & 0x7f) | 0x80;
+		break;
+	case 0xe000:
+		mirroring = data & 0x03;
+		chr_enable = data & 0x10;
+		break;
+	case 0xf000:
+		prg_bank = data & 0x0f;
+		ram_enable = data & 0x10;
+		break;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                RAM ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -65,28 +95,6 @@ uint8_t Sunsoft4::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void Sunsoft4::write_prg(uint16_t addr, uint8_t data)
-{
-	switch (addr & 0xf000)
-	{
-	case 0x8000: case 0x9000: case 0xa000: case 0xb000:
-		chr_bank[(addr >> 12) & 0x03] = data;
-		break;
-	case 0xc000: case 0xd000:
-		nt_bank[(addr >> 12) & 0x01] = (data & 0x7f) | 0x80;
-		break;
-	case 0xe000:
-		mirroring = data & 0x03;
-		chr_enable = data & 0x10;
-		break;
-	case 0xf000:
-		prg_bank = data & 0x0f;
-		ram_enable = data & 0x10;
-		break;
-	}
 }
 
 

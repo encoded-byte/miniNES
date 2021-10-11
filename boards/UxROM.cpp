@@ -17,6 +17,26 @@ void UxROM::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void UxROM::write_reg(uint16_t addr, uint8_t data)
+{
+	prg_bank = data & 0x0f;
+}
+
+// REG write: 0x8000 - 0xffff
+void UxROMA::write_reg(uint16_t addr, uint8_t data)
+{
+	prg_bank = (data >> 2) & 0x0f;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                PRG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -54,18 +74,6 @@ uint8_t UxROMB::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void UxROM::write_prg(uint16_t addr, uint8_t data)
-{
-	prg_bank = data & 0x0f;
-}
-
-// PRG write: 0x8000 - 0xffff
-void UxROMA::write_prg(uint16_t addr, uint8_t data)
-{
-	prg_bank = (data >> 2) & 0x0f;
 }
 
 

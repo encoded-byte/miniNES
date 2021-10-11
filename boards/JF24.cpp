@@ -40,56 +40,13 @@ void JF24::clock()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                                RAM ACCESS
+//                                REG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
 
 
-// RAM read: 0x6000 - 0x7fff
-uint8_t JF24::read_ram(uint16_t addr)
-{
-	if (ram_r_enable)
-		return ram[addr & 0x1fff];
-
-	return 0xff;
-}
-
-// RAM write: 0x6000 - 0x7fff
-void JF24::write_ram(uint16_t addr, uint8_t data)
-{
-	if (ram_w_enable)
-		ram[addr & 0x1fff] = data;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//                                PRG ACCESS
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-// PRG read: 0x8000 - 0xffff
-uint8_t JF24::read_prg(uint16_t addr)
-{
-	uint32_t bank_offset = 0;
-
-	switch (addr & 0xe000)
-	{
-	case 0x8000: bank_offset = prg_bank[0] << 13; break;
-	case 0xa000: bank_offset = prg_bank[1] << 13; break;
-	case 0xc000: bank_offset = prg_bank[2] << 13; break;
-	case 0xe000: bank_offset = info.prg_size - 0x2000; break;
-	}
-
-	uint32_t prg_addr = (addr & 0x1fff) | bank_offset;
-	prg_addr &= info.prg_size - 1;
-
-	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void JF24::write_prg(uint16_t addr, uint8_t data)
+// REG write: 0x8000 - 0xffff
+void JF24::write_reg(uint16_t addr, uint8_t data)
 {
 	uint8_t prg_index = ((addr >> 11) & 0x02) | ((addr >> 1) & 0x01);
 	uint8_t chr_index = (((addr + 0x2000) >> 11) & 0x06) | ((addr >> 1) & 0x01);
@@ -138,6 +95,57 @@ void JF24::write_prg(uint16_t addr, uint8_t data)
 		mirroring = data & 0x03;
 		break;
 	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                RAM ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// RAM read: 0x6000 - 0x7fff
+uint8_t JF24::read_ram(uint16_t addr)
+{
+	if (ram_r_enable)
+		return ram[addr & 0x1fff];
+
+	return 0xff;
+}
+
+// RAM write: 0x6000 - 0x7fff
+void JF24::write_ram(uint16_t addr, uint8_t data)
+{
+	if (ram_w_enable)
+		ram[addr & 0x1fff] = data;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                                PRG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// PRG read: 0x8000 - 0xffff
+uint8_t JF24::read_prg(uint16_t addr)
+{
+	uint32_t bank_offset = 0;
+
+	switch (addr & 0xe000)
+	{
+	case 0x8000: bank_offset = prg_bank[0] << 13; break;
+	case 0xa000: bank_offset = prg_bank[1] << 13; break;
+	case 0xc000: bank_offset = prg_bank[2] << 13; break;
+	case 0xe000: bank_offset = info.prg_size - 0x2000; break;
+	}
+
+	uint32_t prg_addr = (addr & 0x1fff) | bank_offset;
+	prg_addr &= info.prg_size - 1;
+
+	return prg[prg_addr];
 }
 
 

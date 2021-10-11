@@ -45,13 +45,16 @@ protected:
 	std::vector<uint8_t> chr_ram;
 	std::vector<uint8_t> nt_ram;
 
+	// REG Access
+	virtual uint8_t read_reg(uint16_t addr) { return 0; }
+	virtual void write_reg(uint16_t addr, uint8_t data) {}
+
 	// RAM Access
 	virtual uint8_t read_ram(uint16_t addr) { return 0; }
 	virtual void write_ram(uint16_t addr, uint8_t data) {}
 
 	// PRG Access
 	virtual uint8_t read_prg(uint16_t addr) = 0;
-	virtual void write_prg(uint16_t addr, uint8_t data) {}
 
 	// CHR Access
 	virtual uint8_t read_chr(uint16_t addr) = 0;

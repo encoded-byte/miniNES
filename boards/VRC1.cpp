@@ -21,6 +21,36 @@ void VRC1::reset()
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//                                REG ACCESS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+// REG write: 0x8000 - 0xffff
+void VRC1::write_reg(uint16_t addr, uint8_t data)
+{
+	switch (addr & 0xf000)
+	{
+	case 0x8000: case 0xa000: case 0xc000:
+		prg_bank[(addr >> 13) & 0x03] = data & 0x0f;
+		break;
+	case 0x9000:
+		mirroring = data & 0x01;
+		chr_bank[0] = (chr_bank[0] & 0x0f) | (data & 0x02 ? 0x10 : 0);
+		chr_bank[1] = (chr_bank[1] & 0x0f) | (data & 0x04 ? 0x10 : 0);
+		break;
+	case 0xe000:
+		chr_bank[0] = (chr_bank[0] & 0xf0) | (data & 0x0f);
+		break;
+	case 0xf000:
+		chr_bank[1] = (chr_bank[1] & 0xf0) | (data & 0x0f);
+		break;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //                                PRG ACCESS
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -43,28 +73,6 @@ uint8_t VRC1::read_prg(uint16_t addr)
 	prg_addr &= info.prg_size - 1;
 
 	return prg[prg_addr];
-}
-
-// PRG write: 0x8000 - 0xffff
-void VRC1::write_prg(uint16_t addr, uint8_t data)
-{
-	switch (addr & 0xf000)
-	{
-	case 0x8000: case 0xa000: case 0xc000:
-		prg_bank[(addr >> 13) & 0x03] = data & 0x0f;
-		break;
-	case 0x9000:
-		mirroring = data & 0x01;
-		chr_bank[0] = (chr_bank[0] & 0x0f) | (data & 0x02 ? 0x10 : 0);
-		chr_bank[1] = (chr_bank[1] & 0x0f) | (data & 0x04 ? 0x10 : 0);
-		break;
-	case 0xe000:
-		chr_bank[0] = (chr_bank[0] & 0xf0) | (data & 0x0f);
-		break;
-	case 0xf000:
-		chr_bank[1] = (chr_bank[1] & 0xf0) | (data & 0x0f);
-		break;
-	}
 }
 
 
