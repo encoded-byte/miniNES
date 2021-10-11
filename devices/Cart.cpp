@@ -4,6 +4,7 @@
 #include "boards/CNROM.h"
 #include "boards/FDS.h"
 #include "boards/GxROM.h"
+#include "boards/JF24.h"
 #include "boards/MMC1.h"
 #include "boards/MMC2.h"
 #include "boards/MMC3.h"
@@ -61,6 +62,9 @@ void Cart::load(const std::string &filename)
 		case 119: type = new MMC3A(info); break;
 		case 118: type = new MMC3B(info); break;
 		case 10:  type = new MMC4(info); break;
+
+		// Jaleco
+		case 18:  type = new JF24(info); break;
 
 		// Konami
 		case 75:  type = new VRC1(info); break;
