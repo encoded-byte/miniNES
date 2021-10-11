@@ -132,6 +132,9 @@
     <ClCompile Include="boards\JF17.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="boards\JF05.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boards\AxROM.h">
@@ -249,6 +252,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boards\JF17.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\JF05.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -147,6 +147,7 @@
     <ClCompile Include="boards\CNROM.cpp" />
     <ClCompile Include="boards\FDS.cpp" />
     <ClCompile Include="boards\GxROM.cpp" />
+    <ClCompile Include="boards\JF05.cpp" />
     <ClCompile Include="boards\JF17.cpp" />
     <ClCompile Include="boards\JF24.cpp" />
     <ClCompile Include="boards\MMC1.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="boards\CNROM.h" />
     <ClInclude Include="boards\FDS.h" />
     <ClInclude Include="boards\GxROM.h" />
+    <ClInclude Include="boards\JF05.h" />
     <ClInclude Include="boards\JF17.h" />
     <ClInclude Include="boards\JF24.h" />
     <ClInclude Include="boards\MMC1.h" />
