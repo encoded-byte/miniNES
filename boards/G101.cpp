@@ -19,6 +19,23 @@ void G101::reset()
 	mirroring = 0;
 }
 
+// Signal: Reset
+void H3001::reset()
+{
+	G101::reset();
+	irq_counter = 0;
+	irq_reload = 0;
+	irq_enable = 0;
+	irq_request = 0;
+}
+
+// Signal: Clock
+void H3001::clock()
+{
+	if (irq_enable && irq_counter && --irq_counter == 0)
+		irq_request = 1;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -35,13 +52,48 @@ void G101::write_reg(uint16_t addr, uint8_t data)
 	case 0x8000: case 0xa000:
 		prg_bank[(addr >> 13) & 0x01] = data & 0x1f;
 		break;
+	case 0xb000:
+		chr_bank[addr & 0x07] = data;
+		break;
 	case 0x9000:
 		if (info.submapper == 1) break;
 		mirroring = data & 0x01;
 		prg_mode = (data >> 1) & 0x01;
 		break;
-	case 0xb000:
+	}
+}
+
+// REG write: 0x8000 - 0xffff
+void H3001::write_reg(uint16_t addr, uint8_t data)
+{
+	switch (addr)
+	{
+	case 0x8000: case 0xa000:
+		prg_bank[(addr >> 13) & 0x01] = data;
+		break;
+	case 0xb000: case 0xb001: case 0xb002: case 0xb003:
+	case 0xb004: case 0xb005: case 0xb006: case 0xb007:
 		chr_bank[addr & 0x07] = data;
+		break;
+	case 0x9000:
+		prg_mode = data >> 7;
+		break;
+	case 0x9001:
+		mirroring = (data >> 6) & 0x03;
+		break;
+	case 0x9003:
+		irq_enable = data & 0x80;
+		irq_request = 0;
+		break;
+	case 0x9004:
+		irq_counter = irq_reload;
+		irq_request = 0;
+		break;
+	case 0x9005:
+		irq_reload = (irq_reload & 0x00ff) | data << 8;
+		break;
+	case 0x9006:
+		irq_reload = (irq_reload & 0xff00) | data;
 		break;
 	}
 }
@@ -142,6 +194,34 @@ void G101::write_nt(uint16_t addr, uint8_t data)
 		addr = addr_nt_horizontal(addr);
 	else
 		addr = addr_nt_vertical(addr);
+
+	nt_ram[addr] = data;
+}
+
+// NT read: 0x2000 - 0x3eff
+uint8_t H3001::read_nt(uint16_t addr)
+{
+	switch (mirroring)
+	{
+	case 0: addr = addr_nt_vertical(addr); break;
+	case 1: addr = addr_nt_single(addr, 0); break;
+	case 2: addr = addr_nt_horizontal(addr); break;
+	case 3: addr = addr_nt_single(addr, 0); break;
+	}
+
+	return nt_ram[addr];
+}
+
+// NT write: 0x2000 - 0x3eff
+void H3001::write_nt(uint16_t addr, uint8_t data)
+{
+	switch (mirroring)
+	{
+	case 0: addr = addr_nt_vertical(addr); break;
+	case 1: addr = addr_nt_single(addr, 0); break;
+	case 2: addr = addr_nt_horizontal(addr); break;
+	case 3: addr = addr_nt_single(addr, 0); break;
+	}
 
 	nt_ram[addr] = data;
 }

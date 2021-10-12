@@ -67,7 +67,8 @@ void Cart::load(const std::string &filename)
 		case 10:  type = new MMC4(info); break;
 
 		// Irem
-		case 32: type = new G101(info); break;
+		case 32:  type = new G101(info); break;
+		case 65:  type = new H3001(info); break;
 
 		// Jaleco
 		case 87:  type = new JF05(info); break;

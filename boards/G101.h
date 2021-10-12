@@ -34,3 +34,30 @@ public:
 	// Signals
 	void reset() override;
 };
+
+
+class H3001 : public G101
+{
+protected:
+	uint16_t irq_counter;
+	uint16_t irq_reload;
+	bool irq_enable;
+	bool irq_request;
+
+	// REG Access
+	void write_reg(uint16_t addr, uint8_t data) override;
+
+	// NT Access
+	uint8_t read_nt(uint16_t addr) override;
+	void write_nt(uint16_t addr, uint8_t data) override;
+
+public:
+	H3001(BoardInfo info) : G101(info) {}
+
+	// Status
+	bool is_irq() const override { return irq_request; }
+
+	// Signals
+	void reset() override;
+	void clock() override;
+};
