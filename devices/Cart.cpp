@@ -7,6 +7,7 @@
 #include "boards/JF05.h"
 #include "boards/JF17.h"
 #include "boards/JF24.h"
+#include "boards/G101.h"
 #include "boards/MMC1.h"
 #include "boards/MMC2.h"
 #include "boards/MMC3.h"
@@ -64,6 +65,9 @@ void Cart::load(const std::string &filename)
 		case 119: type = new MMC3A(info); break;
 		case 118: type = new MMC3B(info); break;
 		case 10:  type = new MMC4(info); break;
+
+		// Irem
+		case 32: type = new G101(info); break;
 
 		// Jaleco
 		case 87:  type = new JF05(info); break;

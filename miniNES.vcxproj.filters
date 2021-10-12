@@ -135,6 +135,9 @@
     <ClCompile Include="boards\JF05.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="boards\G101.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boards\AxROM.h">
@@ -255,6 +258,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boards\JF05.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\G101.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
