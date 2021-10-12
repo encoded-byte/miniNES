@@ -39,7 +39,7 @@ enum Menu : int
 // Main
 HWND hWnd = NULL;
 Machine machine;
-bool paused = 0;
+bool machinePaused = 0;
 
 // Video
 ID2D1Factory* pFactory = NULL;
@@ -55,12 +55,13 @@ int currentBuffer = 0;
 
 // Forward declarations
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+void ShowErrorDialog(std::runtime_error& err);
 
 
 void CreateMainWindow()
 {
 	WNDCLASS wc = { 0 };
-	wc.lpszClassName = L"miniNES Class";
+	wc.lpszClassName = L"miniNES Window";
 	wc.lpfnWndProc = WindowProc;
 	wc.hInstance = GetModuleHandle(NULL);
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -69,13 +70,13 @@ void CreateMainWindow()
 	HMENU hMenu, hTopMenu = CreateMenu();
 	hMenu = CreateMenu();
 	AppendMenu(hMenu, MF_STRING, Menu::FILE_LOAD, L"&Load");
-	AppendMenu(hMenu, MF_STRING, Menu::FILE_UNLOAD, L"&Unload");
+	AppendMenu(hMenu, MF_GRAYED, Menu::FILE_UNLOAD, L"&Unload");
 	AppendMenu(hMenu, MF_SEPARATOR, 0, NULL);
 	AppendMenu(hMenu, MF_STRING, Menu::FILE_QUIT, L"&Quit");
 	AppendMenu(hTopMenu, MF_POPUP, (UINT_PTR)hMenu, L"&File");
 	hMenu = CreateMenu();
-	AppendMenu(hMenu, MF_STRING, Menu::SYSTEM_PAUSE, L"&Pause");
-	AppendMenu(hMenu, MF_STRING, Menu::SYSTEM_RESET, L"&Reset");
+	AppendMenu(hMenu, MF_GRAYED, Menu::SYSTEM_PAUSE, L"&Pause");
+	AppendMenu(hMenu, MF_GRAYED, Menu::SYSTEM_RESET, L"&Reset");
 	AppendMenu(hTopMenu, MF_POPUP, (UINT_PTR)hMenu, L"&System");
 	hMenu = CreateMenu();
 	AppendMenu(hMenu, MF_STRING, Menu::HELP_ABOUT, L"&About");
@@ -167,36 +168,37 @@ void OnLoad()
 	try
 	{
 		HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_PPV_ARGS(&pFileOpen));
-		if (FAILED(hr)) throw std::runtime_error("COM: " + std::to_string(hr));
+		if (FAILED(hr)) throw hr;
 
 		COMDLG_FILTERSPEC types[] = {{ L"NES files (*.nes;*.fds)", L"*.nes;*.fds" }};
 		hr = pFileOpen->SetFileTypes(ARRAYSIZE(types), types);
-		if (FAILED(hr)) throw std::runtime_error("COM: " + std::to_string(hr));
+		if (FAILED(hr)) throw hr;
 
 		hr = pFileOpen->Show(NULL);
-		if (FAILED(hr)) throw std::runtime_error("COM: " + std::to_string(hr));
+		if (FAILED(hr)) throw hr;
 
 		hr = pFileOpen->GetResult(&pItem);
-		if (FAILED(hr)) throw std::runtime_error("COM: " + std::to_string(hr));
+		if (FAILED(hr)) throw hr;
 
 		PWSTR sPath;
 		hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &sPath);
-		if (FAILED(hr)) throw std::runtime_error("COM: " + std::to_string(hr));
+		if (FAILED(hr)) throw hr;
 
 		std::filesystem::path oPath = sPath;
 		CoTaskMemFree(sPath);
 		machine.load(oPath.string());
-		paused = 0;
-		std::wstring wtext = L"miniNES - " + oPath.stem().wstring();
-		SetWindowText(hWnd, wtext.c_str());
+		machinePaused = 0;
+		EnableMenuItem(GetMenu(hWnd), Menu::FILE_UNLOAD, MF_ENABLED);
+		EnableMenuItem(GetMenu(hWnd), Menu::SYSTEM_PAUSE, MF_ENABLED);
+		EnableMenuItem(GetMenu(hWnd), Menu::SYSTEM_RESET, MF_ENABLED);
+		CheckMenuItem(GetMenu(hWnd), Menu::SYSTEM_PAUSE, MF_UNCHECKED);
+		SetWindowText(hWnd, std::wstring(L"miniNES - " + oPath.stem().wstring()).c_str());
 	}
-	catch (std::runtime_error err)
+	catch (std::runtime_error& err)
 	{
-		std::string text = err.what();
-		std::wstring wtext;
-		std::copy(text.begin(), text.end(), std::back_inserter(wtext));
-		MessageBox(hWnd, wtext.c_str(), L"Error", MB_OK);
+		ShowErrorDialog(err);
 	}
+	catch (HRESULT) {}
 
 	if (pItem) pItem->Release();
 	if (pFileOpen) pFileOpen->Release();
@@ -205,7 +207,25 @@ void OnLoad()
 void OnUnload()
 {
 	machine.unload();
+	machinePaused = 0;
+	EnableMenuItem(GetMenu(hWnd), Menu::FILE_UNLOAD, MF_DISABLED);
+	EnableMenuItem(GetMenu(hWnd), Menu::SYSTEM_PAUSE, MF_DISABLED);
+	EnableMenuItem(GetMenu(hWnd), Menu::SYSTEM_RESET, MF_DISABLED);
+	CheckMenuItem(GetMenu(hWnd), Menu::SYSTEM_PAUSE, MF_UNCHECKED);
 	SetWindowText(hWnd, L"miniNES");
+}
+
+void OnPause()
+{
+	machinePaused = !machinePaused;
+	CheckMenuItem(GetMenu(hWnd), Menu::SYSTEM_PAUSE, machinePaused ? MF_CHECKED : MF_UNCHECKED);
+}
+
+void OnReset()
+{
+	machine.reset();
+	machinePaused = 0;
+	CheckMenuItem(GetMenu(hWnd), Menu::SYSTEM_PAUSE, MF_UNCHECKED);
 }
 
 void OnAbout()
@@ -214,12 +234,21 @@ void OnAbout()
 		hWnd,
 		L"miniNES \u00a9 2021 encoded_byte\nA minimal Famicom/NES emulator",
 		L"miniNES - About",
-		MB_OK);
+		MB_OK | MB_ICONINFORMATION);
+}
+
+void ShowErrorDialog(std::runtime_error& err)
+{
+	std::string text = err.what();
+	std::wstring wtext;
+	std::copy(text.begin(), text.end(), std::back_inserter(wtext));
+	MessageBox(hWnd, wtext.c_str(), L"Error", MB_OK | MB_ICONERROR);
+	OnUnload();
 }
 
 void EmulatorLoop()
 {
-	if (machine.is_ready() && !paused)
+	if (machine.is_ready() && !machinePaused)
 	{
 		for (int i = 0; i != 2; ++i)
 		{
@@ -242,13 +271,9 @@ void EmulatorLoop()
 		{
 			machine.frame();
 		}
-		catch (std::runtime_error err)
+		catch (std::runtime_error& err)
 		{
-			std::string text = err.what();
-			std::wstring wtext;
-			std::copy(text.begin(), text.end(), std::back_inserter(wtext));
-			MessageBox(hWnd, wtext.c_str(), L"Error", MB_OK);
-			OnUnload();
+			ShowErrorDialog(err);
 			return;
 		}
 
@@ -283,10 +308,10 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hWnd);
 			return 0;
 		case Menu::SYSTEM_PAUSE:
-			paused = !paused;
+			OnPause();
 			return 0;
 		case Menu::SYSTEM_RESET:
-			machine.reset();
+			OnReset();
 			return 0;
 		case Menu::HELP_ABOUT:
 			OnAbout();
