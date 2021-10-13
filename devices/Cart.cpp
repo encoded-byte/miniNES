@@ -8,6 +8,9 @@
 #include "boards/JF17.h"
 #include "boards/JF24.h"
 #include "boards/G101.h"
+#include "boards/IF07.h"
+#include "boards/IF09.h"
+#include "boards/IF12.h"
 #include "boards/MMC1.h"
 #include "boards/MMC2.h"
 #include "boards/MMC3.h"
@@ -67,6 +70,9 @@ void Cart::load(const std::string &filename)
 		case 10:  type = new MMC4(info); break;
 
 		// Irem
+		case 77:  type = new IF09(info); break;
+		case 97:  type = new IF07(info); break;
+		case 78:  type = new IF12(info); break;
 		case 32:  type = new G101(info); break;
 		case 65:  type = new H3001(info); break;
 

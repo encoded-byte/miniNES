@@ -24,7 +24,28 @@
     <ClCompile Include="boards\FDS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="boards\G101.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="boards\GxROM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\IF09.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\IF12.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\IF07.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\JF05.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\JF17.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\JF24.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="boards\MMC1.cpp">
@@ -63,6 +84,9 @@
     <ClCompile Include="boards\Sunsoft5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="boards\TC0190.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="boards\UxROM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -79,6 +103,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="boards\VRC7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\X1005.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="boards\X1017.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="devices\APU.cpp">
@@ -117,27 +147,6 @@
     <ClCompile Include="ui\ui-win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="boards\TC0190.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boards\X1005.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boards\X1017.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boards\JF24.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boards\JF17.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boards\JF05.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boards\G101.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boards\AxROM.h">
@@ -149,7 +158,28 @@
     <ClInclude Include="boards\FDS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="boards\G101.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="boards\GxROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\IF07.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\IF09.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\IF12.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\JF05.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\JF17.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\JF24.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boards\MMC1.h">
@@ -188,6 +218,9 @@
     <ClInclude Include="boards\Sunsoft5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="boards\TC0190.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="boards\UxROM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -204,6 +237,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boards\VRC7.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\X1005.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\X1017.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="devices\APU.h">
@@ -240,27 +279,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="machine\Machine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boards\TC0190.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boards\X1005.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boards\X1017.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boards\JF24.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boards\JF17.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boards\JF05.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boards\G101.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
