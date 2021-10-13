@@ -1,6 +1,7 @@
 #include <fstream>
 #include <stdexcept>
 #include "boards/AxROM.h"
+#include "boards/Bandai74161.h"
 #include "boards/CNROM.h"
 #include "boards/FDS.h"
 #include "boards/GxROM.h"
@@ -68,6 +69,10 @@ void Cart::load(const std::string &filename)
 		case 119: type = new MMC3A(info); break;
 		case 118: type = new MMC3B(info); break;
 		case 10:  type = new MMC4(info); break;
+
+		// Bandai
+		case 70:  type = new Bandai74161(info); break;
+		case 152: type = new Bandai74161A(info); break;
 
 		// Irem
 		case 77:  type = new IF09(info); break;

@@ -18,6 +18,9 @@
     <ClCompile Include="boards\AxROM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="boards\Bandai74161.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="boards\CNROM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -150,6 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boards\AxROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\Bandai74161.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boards\CNROM.h">

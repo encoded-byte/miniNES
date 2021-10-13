@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="boards\AxROM.cpp" />
+    <ClCompile Include="boards\Bandai74161.cpp" />
     <ClCompile Include="boards\CNROM.cpp" />
     <ClCompile Include="boards\FDS.cpp" />
     <ClCompile Include="boards\G101.cpp" />
@@ -190,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boards\AxROM.h" />
+    <ClInclude Include="boards\Bandai74161.h" />
     <ClInclude Include="boards\CNROM.h" />
     <ClInclude Include="boards\FDS.h" />
     <ClInclude Include="boards\G101.h" />
