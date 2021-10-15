@@ -24,6 +24,9 @@
     <ClCompile Include="boards\CNROM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="boards\FCG2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="boards\FDS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -159,6 +162,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boards\CNROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="boards\FCG2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boards\FDS.h">

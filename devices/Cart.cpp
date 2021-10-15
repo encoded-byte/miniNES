@@ -4,6 +4,7 @@
 #include "boards/Bandai74161.h"
 #include "boards/CNROM.h"
 #include "boards/FDS.h"
+#include "boards/FCG2.h"
 #include "boards/GxROM.h"
 #include "boards/JF05.h"
 #include "boards/JF17.h"
@@ -73,6 +74,9 @@ void Cart::load(const std::string &filename)
 		// Bandai
 		case 70:  type = new Bandai74161(info); break;
 		case 152: type = new Bandai74161A(info); break;
+		case 16:  type = new FCG2(info); break;
+		case 159: type = new FCG2(info); break;
+		case 153: type = new FCG2A(info); break;
 
 		// Irem
 		case 77:  type = new IF09(info); break;

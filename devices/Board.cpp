@@ -2,7 +2,7 @@
 
 
 Board::Board() :
-	ram(0x8000, 0),
+	ram(0x8000, 0xff),
 	chr_ram(0x2000, 0),
 	nt_ram(0x1000, 0)
 {
@@ -10,7 +10,7 @@ Board::Board() :
 
 Board::Board(BoardInfo info) :
 	info(info),
-	ram(0x8000, 0),
+	ram(0x8000, 0xff),
 	chr_ram(0x2000, 0),
 	nt_ram(0x1000, 0)
 {
