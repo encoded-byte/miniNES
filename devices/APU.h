@@ -125,6 +125,8 @@ private:
 	uint16_t frame_index;
 	int32_t  sample_divider;
 	uint16_t sample_index;
+	bool     irq_enable;
+	bool     irq_request;
 
 	// IO
 	int16_t  output[800] {0x00};
@@ -138,6 +140,9 @@ public:
 	// Device interface
 	uint8_t read(uint16_t addr) override;
 	void write(uint16_t addr, uint8_t data) override;
+
+	// Status
+	bool is_irq() const { return irq_request; }
 
 	// IO
 	const int16_t* get_output() const { return output; }

@@ -68,16 +68,13 @@ uint8_t APU::read(uint16_t addr)
 
 	if (addr == 0x4015)
 	{
-		if (pulse[0].length_counter)
-			data |= 0x01;
-		if (pulse[1].length_counter)
-			data |= 0x02;
-		if (triangle.length_counter)
-			data |= 0x04;
-		if (noise.length_counter)
-			data |= 0x08;
-		if (dmc.length_counter)
-			data |= 0x10;
+		data |= pulse[0].length_counter ? 0x01 : 0;
+		data |= pulse[1].length_counter ? 0x02 : 0;
+		data |= triangle.length_counter ? 0x04 : 0;
+		data |= noise.length_counter ? 0x08 : 0;
+		data |= dmc.length_counter ? 0x10 : 0;
+		data |= irq_request ? 0x40 : 0;
+		irq_request = 0;
 	}
 
 	return data;
@@ -196,10 +193,13 @@ void APU::write(uint16_t addr, uint8_t data)
 		break;
 
 	case 0x4017:
+		irq_enable = ~data & 0x40;
 		extra_step = data & 0x80;
 		frame_step = 0;
 		if (extra_step)
 			quarter_frame();
+		if (!irq_enable)
+			irq_request = 0;
 		frame_divider = frame_length;
 		break;
 	}
@@ -229,6 +229,8 @@ void APU::reset()
 	frame_index = 0;
 	sample_divider = 1;
 	sample_index = 0;
+	irq_enable = 0;
+	irq_request = 0;
 }
 
 // Signal: Clock
@@ -279,8 +281,13 @@ void APU::quarter_frame()
 	triangle.quarter_frame();
 	noise.quarter_frame();
 
-	if (++frame_step == 0 && extra_step)
-		frame_divider += frame_length;
+	if (++frame_step == 0)
+	{
+		if (extra_step)
+			frame_divider += frame_length;
+		else if (irq_enable)
+			irq_request = 1;
+	}
 }
 
 

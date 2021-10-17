@@ -45,7 +45,7 @@ void Machine::reset()
 	ram.reset();
 
 	cpu.nmi(ppu.is_nmi());
-	cpu.irq(cart.is_irq());
+	cpu.irq(apu.is_irq() || cart.is_irq());
 	cpu.rdy(dma.is_rdy());
 }
 
