@@ -7,7 +7,6 @@
 class APU : public Device
 {
 private:
-	static const uint16_t frame_length{29830};
 	static const uint8_t  length_counter_table[32];
 	static const uint8_t  pulse_duty_table[4];
 	static const uint16_t dmc_period_table[16];
@@ -45,6 +44,7 @@ private:
 
 		Envelope envelope;
 		Sweep    sweep;
+		bool     enable;
 		uint32_t length_counter;
 		uint8_t  duty : 2;
 		uint8_t  duty_counter : 3;
@@ -60,6 +60,7 @@ private:
 		void quarter_frame();
 		void half_frame();
 
+		bool     enable;
 		bool     length_counter_halt;
 		bool     linear_reload;
 		uint32_t length_counter;
@@ -79,6 +80,7 @@ private:
 		void half_frame();
 
 		Envelope envelope;
+		bool     enable;
 		bool     mode;
 		uint32_t length_counter;
 		uint8_t  period : 4;
@@ -93,6 +95,7 @@ private:
 		void clock();
 
 		Bus      &bus;
+		bool     enable;
 		bool     loop;
 		bool     buffer_valid;
 		bool     sample_valid;
@@ -109,27 +112,28 @@ private:
 		uint8_t  output;
 	};
 
-	// Channels
+	struct Frame
+	{
+		static const uint16_t length { 29830 };
+
+		bool     irq_enable;
+		bool     irq_request;
+		bool     mode;
+		uint8_t  step : 2;
+		int32_t  divider;
+		uint32_t index;
+	};
+
 	Pulse    pulse[2];
 	Triangle triangle;
 	Noise    noise;
 	DMC      dmc;
-
-	// Registers
-	bool     extra_step;
-	uint8_t  channels_enabled;
-
-	// Status
-	uint8_t  frame_step : 2;
-	int32_t  frame_divider;
-	uint16_t frame_index;
-	int32_t  sample_divider;
-	uint16_t sample_index;
-	bool     irq_enable;
-	bool     irq_request;
+	Frame    frame;
 
 	// IO
-	int16_t  output[800] {0x00};
+	int16_t  output[800];
+	int32_t  output_divider;
+	uint32_t output_index;
 
 	// Signals
 	void quarter_frame();
@@ -142,7 +146,7 @@ public:
 	void write(uint16_t addr, uint8_t data) override;
 
 	// Status
-	bool is_irq() const { return irq_request; }
+	bool is_irq() const { return frame.irq_request; }
 
 	// IO
 	const int16_t* get_output() const { return output; }

@@ -73,8 +73,8 @@ uint8_t APU::read(uint16_t addr)
 		data |= triangle.length_counter ? 0x04 : 0;
 		data |= noise.length_counter ? 0x08 : 0;
 		data |= dmc.length_counter ? 0x10 : 0;
-		data |= irq_request ? 0x40 : 0;
-		irq_request = 0;
+		data |= frame.irq_request ? 0x40 : 0;
+		frame.irq_request = 0;
 	}
 
 	return data;
@@ -114,7 +114,7 @@ void APU::write(uint16_t addr, uint8_t data)
 		pulse[i].period = (pulse[i].period & 0x00ff) | (data << 8);
 		pulse[i].duty_counter = 0;
 		pulse[i].envelope.reload = 1;
-		if (channels_enabled & (1 << i))
+		if (pulse[i].enable)
 			pulse[i].length_counter = length_counter_table[(data >> 3) & 0x1f];
 		break;
 
@@ -130,7 +130,7 @@ void APU::write(uint16_t addr, uint8_t data)
 	case 0x400b:
 		triangle.period = (triangle.period & 0x00ff) | (data << 8);
 		triangle.linear_reload = 1;
-		if (channels_enabled & 0x04)
+		if (triangle.enable)
 			triangle.length_counter = length_counter_table[(data >> 3) & 0x1f];
 		break;
 
@@ -147,7 +147,7 @@ void APU::write(uint16_t addr, uint8_t data)
 
 	case 0x400f:
 		noise.envelope.reload = 1;
-		if (channels_enabled & 0x08)
+		if (noise.enable)
 			noise.length_counter = length_counter_table[(data >> 3) & 0x1f];
 		break;
 
@@ -169,18 +169,22 @@ void APU::write(uint16_t addr, uint8_t data)
 		break;
 
 	case 0x4015:
-		channels_enabled = data & 0x1f;
+		pulse[0].enable = data & 0x01;
+		pulse[1].enable = data & 0x02;
+		triangle.enable = data & 0x04;
+		noise.enable = data & 0x08;
+		dmc.enable = data & 0x10;
 
-		if ((data & 0x01) == 0)
+		if (!pulse[0].enable)
 			pulse[0].length_counter = 0;
-		if ((data & 0x02) == 0)
+		if (!pulse[1].enable)
 			pulse[1].length_counter = 0;
-		if ((data & 0x04) == 0)
+		if (!triangle.enable)
 			triangle.length_counter = 0;
-		if ((data & 0x08) == 0)
+		if (!noise.enable)
 			noise.length_counter = 0;
 
-		if ((data & 0x10) == 0)
+		if (!dmc.enable)
 		{
 			dmc.length_counter = 0;
 			dmc.cycle_counter = 0;
@@ -193,14 +197,14 @@ void APU::write(uint16_t addr, uint8_t data)
 		break;
 
 	case 0x4017:
-		irq_enable = ~data & 0x40;
-		extra_step = data & 0x80;
-		frame_step = 0;
-		if (extra_step)
+		frame.irq_enable = ~data & 0x40;
+		frame.mode = data & 0x80;
+		frame.step = 0;
+		if (frame.mode)
 			quarter_frame();
-		if (!irq_enable)
-			irq_request = 0;
-		frame_divider = frame_length;
+		if (!frame.irq_enable)
+			frame.irq_request = 0;
+		frame.divider = Frame::length;
 		break;
 	}
 }
@@ -222,15 +226,14 @@ void APU::reset()
 	noise.reset();
 	dmc.reset();
 
-	extra_step = 0;
-	channels_enabled = 0;
-	frame_step = 0;
-	frame_divider = 1;
-	frame_index = 0;
-	sample_divider = 1;
-	sample_index = 0;
-	irq_enable = 0;
-	irq_request = 0;
+	frame.irq_enable = 0;
+	frame.irq_request = 0;
+	frame.mode = 0;
+	frame.step = 0;
+	frame.divider = 1;
+	frame.index = 0;
+	output_divider = 1;
+	output_index = 0;
 }
 
 // Signal: Clock
@@ -242,33 +245,33 @@ void APU::clock()
 	noise.clock();
 	dmc.clock();
 
-	frame_divider -= 4;
-	if (frame_divider <= 0)
+	frame.divider -= 4;
+	if (frame.divider <= 0)
 	{
 		quarter_frame();
-		frame_divider += frame_length;
+		frame.divider += Frame::length;
 	}
 
-	sample_divider -= 800;
-	if (sample_divider <= 0)
+	output_divider -= 800;
+	if (output_divider <= 0)
 	{
-		output[sample_index] = pulse_dac[pulse[0].output + pulse[1].output];
-		output[sample_index] += tnd_dac[triangle.output][noise.output][dmc.output];
-		sample_index++;
-		sample_divider += frame_length;
+		output[output_index] = pulse_dac[pulse[0].output + pulse[1].output];
+		output[output_index] += tnd_dac[triangle.output][noise.output][dmc.output];
+		output_index++;
+		output_divider += Frame::length;
 	}
 
-	if (++frame_index == frame_length)
+	if (++frame.index == Frame::length)
 	{
-		frame_index = 0;
-		sample_index = 0;
+		frame.index = 0;
+		output_index = 0;
 	}
 }
 
 // Signal: Quarter Frame
 void APU::quarter_frame()
 {
-	if ((frame_step & 0x01) == 0)
+	if ((frame.step & 0x01) == 0)
 	{
 		pulse[0].half_frame();
 		pulse[1].half_frame();
@@ -281,12 +284,12 @@ void APU::quarter_frame()
 	triangle.quarter_frame();
 	noise.quarter_frame();
 
-	if (++frame_step == 0)
+	if (++frame.step == 0)
 	{
-		if (extra_step)
-			frame_divider += frame_length;
-		else if (irq_enable)
-			irq_request = 1;
+		if (frame.mode)
+			frame.divider += Frame::length;
+		else if (frame.irq_enable)
+			frame.irq_request = 1;
 	}
 }
 
@@ -315,6 +318,7 @@ void APU::Pulse::reset()
 	sweep.shift = 0;
 	sweep.period = 0;
 
+	enable = 0;
 	length_counter = 0;
 	duty = 0;
 	duty_counter = 0;
@@ -399,6 +403,7 @@ void APU::Pulse::half_frame()
 // Signal: Reset (Triangle)
 void APU::Triangle::reset()
 {
+	enable = 0;
 	length_counter_halt = 0;
 	linear_reload = 0;
 	length_counter = 0;
@@ -463,6 +468,7 @@ void APU::Noise::reset()
 	envelope.volume = 0;
 	envelope.decay = 0;
 
+	enable = 0;
 	mode = 0;
 	length_counter = 0;
 	period = 0;
@@ -524,6 +530,7 @@ void APU::Noise::half_frame()
 // Signal: Reset (DMC)
 void APU::DMC::reset()
 {
+	enable = 0;
 	loop = 0;
 	buffer_valid = 0;
 	sample_valid = 0;
