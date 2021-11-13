@@ -38,7 +38,7 @@ void BNROM::write_reg(uint16_t addr, uint8_t data)
 // REG write: 0x8000 - 0xffff
 void AxROM::write_reg(uint16_t addr, uint8_t data)
 {
-	prg_bank = data & 0x03;
+	prg_bank = data & 0x07;
 	nt_bank = (data >> 4) & 0x01;
 }
 
